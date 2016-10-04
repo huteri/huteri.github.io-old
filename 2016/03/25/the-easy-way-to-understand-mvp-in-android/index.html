@@ -1,0 +1,858 @@
+
+<!DOCTYPE HTML>
+
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<title>The Easy Way to Understand MVP in Android - Huteri Manza Blog</title>
+	<meta name="author" content="Huteri Manza">
+
+	
+	<meta name="description" content="The Easy Way to Understand MVP in Android Today, I would like to talk about MVP in android. I know that there are a lot of resources recently &hellip;">
+	
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<link href="/atom.xml" rel="alternate" title="Huteri Manza Blog" type="application/atom+xml">
+	
+	<link rel="canonical" href="http://huteri.me/2016/03/25/the-easy-way-to-understand-mvp-in-android/">
+	<link href="/favicon.png" rel="shortcut icon">
+	<link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<link href="/stylesheets/font-awesome.min.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	<link href='http://fonts.googleapis.com/css?family=Nunito:400,300,700' rel='stylesheet' type='text/css'>
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+	
+  
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', 'UA-65050731-1']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+	</script>
+
+
+</head>
+
+
+<body>
+	<div class="container">
+		<div class="left-col">
+			<div class="intrude-less">
+			<header id="header" class="inner"><div class="profilepic">
+	
+	<script src="/javascripts/md5.js"></script>
+	<script type="text/javascript">
+		$(function(){
+			$('.profilepic').append("<img src='/images/profile.jpg' alt='Profile Picture' style='width: 160px;' />");
+		});
+	</script>
+	
+</div>
+
+<nav id="main-nav"><ul class="main">
+    <li><a href="/">Home</a></li>
+    <li><a href="/about">About</a></li>
+    <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+<section class="aboutme">
+  <p>
+    Written by Huteri Manza and it's mostly talking about Android Development tips and tricks
+  </p>
+</section>
+</nav>
+<nav id="sub-nav">
+	<div class="social">
+		
+		
+		
+			<a class="google" href="https://plus.google.com/huterimanza" rel="author" title="Google+">Google+</a>
+		
+		
+			<a class="twitter" href="http://twitter.com/huterimanza" title="Twitter">Twitter</a>
+		
+		
+			<a class="github" href="https://github.com/huteri" title="GitHub">GitHub</a>
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+    	
+    	
+			<a class="rss" href="/atom.xml" title="RSS">RSS</a>
+		
+	</div>
+</nav>
+</header>				
+			</div>
+		</div>	
+		<div class="mid-col">
+			
+				
+			
+			<div class="mid-col-container">
+				<div id="content" class="inner"><article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+	<h1 class="title" itemprop="name">The Easy Way to Understand MVP in Android</h1>
+	<div class="entry-content" itemprop="articleBody"><p>Today, I would like to talk about MVP in android. I know that there are a lot of resources recently talking about MVP in android. MVP is now considered as the best architecture available in Android Development. I tried to learn about this clean archictecture, and I admit it is quite hard to learn for newbie like me.</p>
+
+<!--more-->
+
+
+<p>I hope there is a better way to understand the concept of the MVP first before we talk about the better way in implementing MVP. This is the purpose of this article. I want to give a good and easy sample how to implement MVP in the easiest way. I have read a lot of articles about MVP, and I will put them in the references later.</p>
+
+<p>If you are also new in MVP, then I suggest to read this post first and then continue on the article I’ll give in the references.</p>
+
+<p>So, the core purpose of MVP is to make the code testable. if you realize that there were a litle detail about how to really implement a good unit testing in Android because unit testing was really hard in Android since we depended a lot in Android framework.</p>
+
+<p>But, today, with MVP and clean architecture, we can improve the coverage of unit testing in our code and make them testable.</p>
+
+<p>ok, stop talking and let’s see the code. I have written a simple android app with clean architecture. It is mostly based on the reference from Google but I improve it to make it easier to understand.</p>
+
+<p>The good thing about this sample app is that I don’t use any third party libraries, I know it is not good, but I made it just for learning purpose. I also put some common best practices if you want to use it in real development.</p>
+
+<p>Here we go <a href="https://github.com/huteri/mvp-android">https://github.com/huteri/mvp-android</a></p>
+
+<p>Let’s get to the explanation. The simple way to understand MVP is to think about this figure.</p>
+
+<p><img src="http://fernandocejas.com/wp-content/uploads/2014/09/clean_architecture_mvp.png"></p>
+
+<p>Ok, maybe it’s not that useful. So the purpose of this figure is to tell you that we should not access the data layer (Model) directly from the view. We have to use the second party called presenter to coordinate the data into the view. But why? because view is heavily depended on android framework such as activity and fragment and it makes testing data layer in the view almost impossible. Data layer consists of our business logic and it should be tested properly.</p>
+
+<p><strong>How do we make it?</strong></p>
+
+<p>By moving all the responsibilites of the view to presenter. Now presenter is responsible for getting and managing the data. View just shows it to UI by using android framework.</p>
+
+<p>Now, we understand the concept, but how do we implement it? If you read carefully, we have 2 process here,</p>
+
+<ol>
+<li>Delegate all the user actions from view to presenter</li>
+<li>Presenter can send the data to the view and the view should show it to UI.</li>
+</ol>
+
+
+<p>Let’s talk about the first process, look on this sample code</p>
+
+<figure class='code'><figcaption><span>MainActivity.java</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+<span class='line-number'>49</span>
+<span class='line-number'>50</span>
+<span class='line-number'>51</span>
+<span class='line-number'>52</span>
+<span class='line-number'>53</span>
+<span class='line-number'>54</span>
+<span class='line-number'>55</span>
+<span class='line-number'>56</span>
+<span class='line-number'>57</span>
+<span class='line-number'>58</span>
+<span class='line-number'>59</span>
+<span class='line-number'>60</span>
+<span class='line-number'>61</span>
+<span class='line-number'>62</span>
+<span class='line-number'>63</span>
+<span class='line-number'>64</span>
+<span class='line-number'>65</span>
+<span class='line-number'>66</span>
+<span class='line-number'>67</span>
+<span class='line-number'>68</span>
+<span class='line-number'>69</span>
+<span class='line-number'>70</span>
+<span class='line-number'>71</span>
+<span class='line-number'>72</span>
+<span class='line-number'>73</span>
+<span class='line-number'>74</span>
+<span class='line-number'>75</span>
+<span class='line-number'>76</span>
+<span class='line-number'>77</span>
+<span class='line-number'>78</span>
+<span class='line-number'>79</span>
+<span class='line-number'>80</span>
+<span class='line-number'>81</span>
+<span class='line-number'>82</span>
+<span class='line-number'>83</span>
+<span class='line-number'>84</span>
+<span class='line-number'>85</span>
+<span class='line-number'>86</span>
+<span class='line-number'>87</span>
+<span class='line-number'>88</span>
+<span class='line-number'>89</span>
+<span class='line-number'>90</span>
+<span class='line-number'>91</span>
+<span class='line-number'>92</span>
+<span class='line-number'>93</span>
+<span class='line-number'>94</span>
+<span class='line-number'>95</span>
+<span class='line-number'>96</span>
+<span class='line-number'>97</span>
+<span class='line-number'>98</span>
+<span class='line-number'>99</span>
+<span class='line-number'>100</span>
+<span class='line-number'>101</span>
+<span class='line-number'>102</span>
+<span class='line-number'>103</span>
+<span class='line-number'>104</span>
+<span class='line-number'>105</span>
+<span class='line-number'>106</span>
+<span class='line-number'>107</span>
+<span class='line-number'>108</span>
+<span class='line-number'>109</span>
+<span class='line-number'>110</span>
+<span class='line-number'>111</span>
+<span class='line-number'>112</span>
+<span class='line-number'>113</span>
+<span class='line-number'>114</span>
+<span class='line-number'>115</span>
+<span class='line-number'>116</span>
+<span class='line-number'>117</span>
+<span class='line-number'>118</span>
+<span class='line-number'>119</span>
+<span class='line-number'>120</span>
+<span class='line-number'>121</span>
+<span class='line-number'>122</span>
+<span class='line-number'>123</span>
+<span class='line-number'>124</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="kn">package</span> <span class="n">me</span><span class="o">.</span><span class="na">huteri</span><span class="o">.</span><span class="na">weather</span><span class="o">.</span><span class="na">features</span><span class="o">.</span><span class="na">main</span><span class="o">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="kn">import</span> <span class="nn">android.os.Bundle</span><span class="o">;</span>
+</span><span class='line'><span class="kn">import</span> <span class="nn">android.support.annotation.VisibleForTesting</span><span class="o">;</span>
+</span><span class='line'><span class="kn">import</span> <span class="nn">android.support.v4.widget.SwipeRefreshLayout</span><span class="o">;</span>
+</span><span class='line'><span class="kn">import</span> <span class="nn">android.support.v7.widget.LinearLayoutManager</span><span class="o">;</span>
+</span><span class='line'><span class="kn">import</span> <span class="nn">android.support.v7.widget.RecyclerView</span><span class="o">;</span>
+</span><span class='line'><span class="kn">import</span> <span class="nn">android.view.Menu</span><span class="o">;</span>
+</span><span class='line'><span class="kn">import</span> <span class="nn">android.view.MenuItem</span><span class="o">;</span>
+</span><span class='line'><span class="kn">import</span> <span class="nn">android.widget.Toast</span><span class="o">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="kn">import</span> <span class="nn">java.util.List</span><span class="o">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="kn">import</span> <span class="nn">me.huteri.weather.R</span><span class="o">;</span>
+</span><span class='line'><span class="kn">import</span> <span class="nn">me.huteri.weather.features.BaseActivity</span><span class="o">;</span>
+</span><span class='line'><span class="kn">import</span> <span class="nn">me.huteri.weather.features.adapter.WeatherListAdapter</span><span class="o">;</span>
+</span><span class='line'><span class="kn">import</span> <span class="nn">me.huteri.weather.model.Weather</span><span class="o">;</span>
+</span><span class='line'><span class="kn">import</span> <span class="nn">me.huteri.weather.model.service.WeatherApiImpl</span><span class="o">;</span>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'><span class="kd">public</span> <span class="kd">class</span> <span class="nc">MainActivity</span> <span class="kd">extends</span> <span class="n">BaseActivity</span> <span class="kd">implements</span> <span class="n">MainView</span><span class="o">,</span> <span class="n">WeatherListAdapter</span><span class="o">.</span><span class="na">WeatherItemListener</span> <span class="o">{</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="kd">private</span> <span class="n">MainPresenterImpl</span> <span class="n">mPresenter</span><span class="o">;</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="kd">private</span> <span class="n">WeatherListAdapter</span> <span class="n">mWeatherListAdapter</span><span class="o">;</span>
+</span><span class='line'>    <span class="kd">private</span> <span class="n">SwipeRefreshLayout</span> <span class="n">mSrl</span><span class="o">;</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="nd">@Override</span>
+</span><span class='line'>    <span class="kd">protected</span> <span class="kt">void</span> <span class="nf">onCreate</span><span class="o">(</span><span class="n">Bundle</span> <span class="n">savedInstanceState</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>        <span class="kd">super</span><span class="o">.</span><span class="na">onCreate</span><span class="o">(</span><span class="n">savedInstanceState</span><span class="o">);</span>
+</span><span class='line'>        <span class="n">setContentView</span><span class="o">(</span><span class="n">R</span><span class="o">.</span><span class="na">layout</span><span class="o">.</span><span class="na">activity_main</span><span class="o">);</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="n">mPresenter</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">MainPresenterImpl</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="k">new</span> <span class="nf">WeatherApiImpl</span><span class="o">());</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="n">initRecyclerView</span><span class="o">();</span>
+</span><span class='line'>        <span class="n">initSwipeRefreshLayout</span><span class="o">();</span>
+</span><span class='line'>    <span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="nd">@Override</span>
+</span><span class='line'>    <span class="kd">protected</span> <span class="kt">void</span> <span class="nf">onResume</span><span class="o">()</span> <span class="o">{</span>
+</span><span class='line'>        <span class="kd">super</span><span class="o">.</span><span class="na">onResume</span><span class="o">();</span>
+</span><span class='line'>        <span class="n">mPresenter</span><span class="o">.</span><span class="na">loadWeatherData</span><span class="o">();</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="nd">@Override</span>
+</span><span class='line'>    <span class="kd">public</span> <span class="kt">boolean</span> <span class="nf">onCreateOptionsMenu</span><span class="o">(</span><span class="n">Menu</span> <span class="n">menu</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>        <span class="n">getMenuInflater</span><span class="o">().</span><span class="na">inflate</span><span class="o">(</span><span class="n">R</span><span class="o">.</span><span class="na">menu</span><span class="o">.</span><span class="na">menu_main</span><span class="o">,</span> <span class="n">menu</span><span class="o">);</span>
+</span><span class='line'>        <span class="k">return</span> <span class="kc">true</span><span class="o">;</span>
+</span><span class='line'>    <span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="nd">@Override</span>
+</span><span class='line'>    <span class="kd">public</span> <span class="kt">boolean</span> <span class="nf">onOptionsItemSelected</span><span class="o">(</span><span class="n">MenuItem</span> <span class="n">item</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>        <span class="k">switch</span> <span class="o">(</span><span class="n">item</span><span class="o">.</span><span class="na">getItemId</span><span class="o">())</span> <span class="o">{</span>
+</span><span class='line'>            <span class="k">case</span> <span class="n">R</span><span class="o">.</span><span class="na">id</span><span class="o">.</span><span class="na">action_refresh</span><span class="o">:</span>
+</span><span class='line'>                <span class="n">mPresenter</span><span class="o">.</span><span class="na">loadWeatherData</span><span class="o">();</span>
+</span><span class='line'>                <span class="k">break</span><span class="o">;</span>
+</span><span class='line'>        <span class="o">}</span>
+</span><span class='line'>        <span class="k">return</span> <span class="kc">true</span><span class="o">;</span>
+</span><span class='line'>    <span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="nd">@Override</span>
+</span><span class='line'>    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">showProgress</span><span class="o">()</span> <span class="o">{</span>
+</span><span class='line'>        <span class="k">if</span><span class="o">(!</span><span class="n">mSrl</span><span class="o">.</span><span class="na">isRefreshing</span><span class="o">())</span> <span class="o">{</span>
+</span><span class='line'>
+</span><span class='line'>            <span class="c1">// make sure setRefreshing() is called after the layout done everything else</span>
+</span><span class='line'>            <span class="n">mSrl</span><span class="o">.</span><span class="na">post</span><span class="o">(</span><span class="k">new</span> <span class="nf">Runnable</span><span class="o">()</span> <span class="o">{</span>
+</span><span class='line'>                <span class="nd">@Override</span>
+</span><span class='line'>                <span class="kd">public</span> <span class="kt">void</span> <span class="nf">run</span><span class="o">()</span> <span class="o">{</span>
+</span><span class='line'>                    <span class="n">mSrl</span><span class="o">.</span><span class="na">setRefreshing</span><span class="o">(</span><span class="kc">true</span><span class="o">);</span>
+</span><span class='line'>                <span class="o">}</span>
+</span><span class='line'>            <span class="o">});</span>
+</span><span class='line'>        <span class="o">}</span>
+</span><span class='line'>    <span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="nd">@Override</span>
+</span><span class='line'>    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">hideProgress</span><span class="o">()</span> <span class="o">{</span>
+</span><span class='line'>        <span class="k">if</span><span class="o">(</span><span class="n">mSrl</span><span class="o">.</span><span class="na">isRefreshing</span><span class="o">())</span> <span class="o">{</span>
+</span><span class='line'>            <span class="n">mSrl</span><span class="o">.</span><span class="na">setRefreshing</span><span class="o">(</span><span class="kc">false</span><span class="o">);</span>
+</span><span class='line'>        <span class="o">}</span>
+</span><span class='line'>    <span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="nd">@Override</span>
+</span><span class='line'>    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">showWeatherClickedMessage</span><span class="o">(</span><span class="n">Weather</span> <span class="n">s</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>        <span class="n">Toast</span><span class="o">.</span><span class="na">makeText</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="n">String</span><span class="o">.</span><span class="na">format</span><span class="o">(</span><span class="n">getString</span><span class="o">(</span><span class="n">R</span><span class="o">.</span><span class="na">string</span><span class="o">.</span><span class="na">main_toast_weather_item_click</span><span class="o">),</span> <span class="n">s</span><span class="o">.</span><span class="na">getCityName</span><span class="o">()),</span> <span class="n">Toast</span><span class="o">.</span><span class="na">LENGTH_SHORT</span><span class="o">).</span><span class="na">show</span><span class="o">();</span>
+</span><span class='line'>    <span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="nd">@Override</span>
+</span><span class='line'>    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">showWeathers</span><span class="o">(</span><span class="n">List</span><span class="o">&lt;</span><span class="n">Weather</span><span class="o">&gt;</span> <span class="n">weathers</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>        <span class="n">mWeatherListAdapter</span><span class="o">.</span><span class="na">replaceData</span><span class="o">(</span><span class="n">weathers</span><span class="o">);</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="nd">@Override</span>
+</span><span class='line'>    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">showConnectionError</span><span class="o">()</span> <span class="o">{</span>
+</span><span class='line'>        <span class="n">Toast</span><span class="o">.</span><span class="na">makeText</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="n">R</span><span class="o">.</span><span class="na">string</span><span class="o">.</span><span class="na">main_error_connection</span><span class="o">,</span> <span class="n">Toast</span><span class="o">.</span><span class="na">LENGTH_SHORT</span><span class="o">).</span><span class="na">show</span><span class="o">();</span>
+</span><span class='line'>    <span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="nd">@Override</span>
+</span><span class='line'>    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onWeatherItemClick</span><span class="o">(</span><span class="n">Weather</span> <span class="n">item</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>        <span class="n">mPresenter</span><span class="o">.</span><span class="na">clickWeatherItem</span><span class="o">(</span><span class="n">item</span><span class="o">);</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="kd">private</span> <span class="kt">void</span> <span class="nf">initSwipeRefreshLayout</span><span class="o">()</span> <span class="o">{</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="n">mSrl</span> <span class="o">=</span> <span class="o">(</span><span class="n">SwipeRefreshLayout</span><span class="o">)</span> <span class="n">findViewById</span><span class="o">(</span><span class="n">R</span><span class="o">.</span><span class="na">id</span><span class="o">.</span><span class="na">srl</span><span class="o">);</span>
+</span><span class='line'>        <span class="n">mSrl</span><span class="o">.</span><span class="na">setOnRefreshListener</span><span class="o">(</span><span class="k">new</span> <span class="n">SwipeRefreshLayout</span><span class="o">.</span><span class="na">OnRefreshListener</span><span class="o">()</span> <span class="o">{</span>
+</span><span class='line'>            <span class="nd">@Override</span>
+</span><span class='line'>            <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onRefresh</span><span class="o">()</span> <span class="o">{</span>
+</span><span class='line'>                <span class="n">mPresenter</span><span class="o">.</span><span class="na">loadWeatherData</span><span class="o">();</span>
+</span><span class='line'>            <span class="o">}</span>
+</span><span class='line'>        <span class="o">});</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="kd">private</span> <span class="kt">void</span> <span class="nf">initRecyclerView</span><span class="o">()</span> <span class="o">{</span>
+</span><span class='line'>        <span class="n">mWeatherListAdapter</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">WeatherListAdapter</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="k">this</span><span class="o">);</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="n">RecyclerView</span> <span class="n">rvWeatherList</span> <span class="o">=</span> <span class="o">(</span><span class="n">RecyclerView</span><span class="o">)</span> <span class="n">findViewById</span><span class="o">(</span><span class="n">R</span><span class="o">.</span><span class="na">id</span><span class="o">.</span><span class="na">rv_main</span><span class="o">);</span>
+</span><span class='line'>        <span class="n">rvWeatherList</span><span class="o">.</span><span class="na">setLayoutManager</span><span class="o">(</span><span class="k">new</span> <span class="nf">LinearLayoutManager</span><span class="o">(</span><span class="k">this</span><span class="o">));</span>
+</span><span class='line'>        <span class="n">rvWeatherList</span><span class="o">.</span><span class="na">setAdapter</span><span class="o">(</span><span class="n">mWeatherListAdapter</span><span class="o">);</span>
+</span><span class='line'>    <span class="o">}</span>
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>See, I just delegate methods to presenter with <code>mPresener.theMethodHere()</code>. Just ignore code you don’t know, we’ll talk about that later. Now look on the presenter.</p>
+
+<figure class='code'><figcaption><span>MainPresenter.java</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="kn">package</span> <span class="n">me</span><span class="o">.</span><span class="na">huteri</span><span class="o">.</span><span class="na">weather</span><span class="o">.</span><span class="na">features</span><span class="o">.</span><span class="na">main</span><span class="o">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="kn">import</span> <span class="nn">me.huteri.weather.model.Weather</span><span class="o">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="kd">public</span> <span class="kd">interface</span> <span class="nc">MainPresenter</span><span class="o">{</span>
+</span><span class='line'>    <span class="kt">void</span> <span class="nf">loadWeatherData</span><span class="o">();</span>
+</span><span class='line'>    <span class="kt">void</span> <span class="nf">clickWeatherItem</span><span class="o">(</span><span class="n">Weather</span> <span class="n">item</span><span class="o">);</span>
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<figure class='code'><figcaption><span>MainPresenterImpl.java</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+<span class='line-number'>49</span>
+<span class='line-number'>50</span>
+<span class='line-number'>51</span>
+<span class='line-number'>52</span>
+<span class='line-number'>53</span>
+<span class='line-number'>54</span>
+<span class='line-number'>55</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="kn">package</span> <span class="n">me</span><span class="o">.</span><span class="na">huteri</span><span class="o">.</span><span class="na">weather</span><span class="o">.</span><span class="na">features</span><span class="o">.</span><span class="na">main</span><span class="o">;</span>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'><span class="kn">import</span> <span class="nn">java.util.List</span><span class="o">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="kn">import</span> <span class="nn">me.huteri.weather.features.BasePresenter</span><span class="o">;</span>
+</span><span class='line'><span class="kn">import</span> <span class="nn">me.huteri.weather.model.Weather</span><span class="o">;</span>
+</span><span class='line'><span class="kn">import</span> <span class="nn">me.huteri.weather.model.service.WeatherApi</span><span class="o">;</span>
+</span><span class='line'><span class="kn">import</span> <span class="nn">me.huteri.weather.model.service.WeatherApiImpl</span><span class="o">;</span>
+</span><span class='line'><span class="kn">import</span> <span class="nn">me.huteri.weather.util.EspressoIdlingResource</span><span class="o">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="cm">/**</span>
+</span><span class='line'><span class="cm"> * The implementation of the main presenter interface</span>
+</span><span class='line'><span class="cm"> */</span>
+</span><span class='line'>
+</span><span class='line'><span class="kd">public</span> <span class="kd">class</span> <span class="nc">MainPresenterImpl</span> <span class="kd">extends</span> <span class="n">BasePresenter</span> <span class="kd">implements</span> <span class="n">MainPresenter</span> <span class="o">{</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="kd">private</span> <span class="kd">final</span> <span class="n">MainView</span> <span class="n">mView</span><span class="o">;</span>
+</span><span class='line'>    <span class="kd">private</span> <span class="kd">final</span> <span class="n">WeatherApiImpl</span> <span class="n">mWeatherApi</span><span class="o">;</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="kd">public</span> <span class="nf">MainPresenterImpl</span><span class="o">(</span><span class="n">MainView</span> <span class="n">view</span><span class="o">,</span> <span class="n">WeatherApiImpl</span> <span class="n">weatherApi</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>        <span class="n">mView</span> <span class="o">=</span> <span class="n">view</span><span class="o">;</span>
+</span><span class='line'>        <span class="n">mWeatherApi</span> <span class="o">=</span> <span class="n">weatherApi</span><span class="o">;</span>
+</span><span class='line'>    <span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="nd">@Override</span>
+</span><span class='line'>    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">loadWeatherData</span><span class="o">()</span> <span class="o">{</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="n">mView</span><span class="o">.</span><span class="na">showProgress</span><span class="o">();</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="n">EspressoIdlingResource</span><span class="o">.</span><span class="na">increment</span><span class="o">();</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="n">mWeatherApi</span><span class="o">.</span><span class="na">getAllWeathers</span><span class="o">(</span><span class="k">new</span> <span class="n">WeatherApi</span><span class="o">.</span><span class="na">WeatherServiceCallback</span><span class="o">&lt;</span><span class="n">List</span><span class="o">&lt;</span><span class="n">Weather</span><span class="o">&gt;&gt;()</span> <span class="o">{</span>
+</span><span class='line'>
+</span><span class='line'>            <span class="nd">@Override</span>
+</span><span class='line'>            <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onSuccess</span><span class="o">(</span><span class="n">List</span><span class="o">&lt;</span><span class="n">Weather</span><span class="o">&gt;</span> <span class="n">weathers</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>                <span class="n">EspressoIdlingResource</span><span class="o">.</span><span class="na">decrement</span><span class="o">();</span>
+</span><span class='line'>                <span class="n">mView</span><span class="o">.</span><span class="na">hideProgress</span><span class="o">();</span>
+</span><span class='line'>                <span class="n">mView</span><span class="o">.</span><span class="na">showWeathers</span><span class="o">(</span><span class="n">weathers</span><span class="o">);</span>
+</span><span class='line'>            <span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'>            <span class="nd">@Override</span>
+</span><span class='line'>            <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onFailure</span><span class="o">()</span> <span class="o">{</span>
+</span><span class='line'>                <span class="n">EspressoIdlingResource</span><span class="o">.</span><span class="na">decrement</span><span class="o">();</span>
+</span><span class='line'>                <span class="n">mView</span><span class="o">.</span><span class="na">showConnectionError</span><span class="o">();</span>
+</span><span class='line'>                <span class="n">mView</span><span class="o">.</span><span class="na">hideProgress</span><span class="o">();</span>
+</span><span class='line'>            <span class="o">}</span>
+</span><span class='line'>        <span class="o">});</span>
+</span><span class='line'>    <span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="nd">@Override</span>
+</span><span class='line'>    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">clickWeatherItem</span><span class="o">(</span><span class="n">Weather</span> <span class="n">item</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>        <span class="n">mView</span><span class="o">.</span><span class="na">showWeatherClickedMessage</span><span class="o">(</span><span class="n">item</span><span class="o">);</span>
+</span><span class='line'>    <span class="o">}</span>
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>In the presenter, we define the method for <code>MainPresenter.theMethodHere()</code>, basically all the methods delegated from view. It’s that simple. Now let’s talk about the second process, presenter should send the data to view, and the view should show it to UI. If you are looking carefully in the presenter, we have <code>MainView</code> interface. It’s for the second process, the way for presenter to send the data to view, and the view should show it to UI.</p>
+
+<figure class='code'><figcaption><span>MainView.java</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="kn">package</span> <span class="n">me</span><span class="o">.</span><span class="na">huteri</span><span class="o">.</span><span class="na">weather</span><span class="o">.</span><span class="na">features</span><span class="o">.</span><span class="na">main</span><span class="o">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="kn">import</span> <span class="nn">java.util.List</span><span class="o">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="kn">import</span> <span class="nn">me.huteri.weather.model.Weather</span><span class="o">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="kd">public</span> <span class="kd">interface</span> <span class="nc">MainView</span> <span class="o">{</span>
+</span><span class='line'>    <span class="kt">void</span> <span class="nf">showProgress</span><span class="o">();</span>
+</span><span class='line'>    <span class="kt">void</span> <span class="nf">hideProgress</span><span class="o">();</span>
+</span><span class='line'>    <span class="kt">void</span> <span class="nf">showWeatherClickedMessage</span><span class="o">(</span><span class="n">Weather</span> <span class="n">s</span><span class="o">);</span>
+</span><span class='line'>    <span class="kt">void</span> <span class="nf">showWeathers</span><span class="o">(</span><span class="n">List</span><span class="o">&lt;</span><span class="n">Weather</span><span class="o">&gt;</span> <span class="n">weathers</span><span class="o">);</span>
+</span><span class='line'>    <span class="kt">void</span> <span class="nf">showConnectionError</span><span class="o">();</span>
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>And <code>MainActivity</code> only needs to implement this interface. We implement MainView interface because this is the way for the presenter to inform the view.</p>
+
+<p>Basically, MVP is just like that but we are just talking about view layer here, we are not talking about data layer.</p>
+
+<p>With this principle, we can test our data layer usage in presenter easily.</p>
+
+<figure class='code'><figcaption><span>MainPresenterImplTest.java</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+<span class='line-number'>49</span>
+<span class='line-number'>50</span>
+<span class='line-number'>51</span>
+<span class='line-number'>52</span>
+<span class='line-number'>53</span>
+<span class='line-number'>54</span>
+<span class='line-number'>55</span>
+<span class='line-number'>56</span>
+<span class='line-number'>57</span>
+<span class='line-number'>58</span>
+<span class='line-number'>59</span>
+<span class='line-number'>60</span>
+<span class='line-number'>61</span>
+<span class='line-number'>62</span>
+<span class='line-number'>63</span>
+<span class='line-number'>64</span>
+<span class='line-number'>65</span>
+<span class='line-number'>66</span>
+<span class='line-number'>67</span>
+<span class='line-number'>68</span>
+<span class='line-number'>69</span>
+<span class='line-number'>70</span>
+<span class='line-number'>71</span>
+<span class='line-number'>72</span>
+<span class='line-number'>73</span>
+<span class='line-number'>74</span>
+<span class='line-number'>75</span>
+<span class='line-number'>76</span>
+<span class='line-number'>77</span>
+<span class='line-number'>78</span>
+<span class='line-number'>79</span>
+<span class='line-number'>80</span>
+<span class='line-number'>81</span>
+<span class='line-number'>82</span>
+<span class='line-number'>83</span>
+<span class='line-number'>84</span>
+<span class='line-number'>85</span>
+<span class='line-number'>86</span>
+<span class='line-number'>87</span>
+<span class='line-number'>88</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="kn">package</span> <span class="n">me</span><span class="o">.</span><span class="na">huteri</span><span class="o">.</span><span class="na">weather</span><span class="o">.</span><span class="na">features</span><span class="o">.</span><span class="na">main</span><span class="o">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="kn">import</span> <span class="nn">org.junit.Before</span><span class="o">;</span>
+</span><span class='line'><span class="kn">import</span> <span class="nn">org.junit.Test</span><span class="o">;</span>
+</span><span class='line'><span class="kn">import</span> <span class="nn">org.mockito.ArgumentCaptor</span><span class="o">;</span>
+</span><span class='line'><span class="kn">import</span> <span class="nn">org.mockito.Captor</span><span class="o">;</span>
+</span><span class='line'><span class="kn">import</span> <span class="nn">org.mockito.Mock</span><span class="o">;</span>
+</span><span class='line'><span class="kn">import</span> <span class="nn">org.mockito.MockitoAnnotations</span><span class="o">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="kn">import</span> <span class="nn">java.util.ArrayList</span><span class="o">;</span>
+</span><span class='line'><span class="kn">import</span> <span class="nn">java.util.List</span><span class="o">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="kn">import</span> <span class="nn">me.huteri.weather.model.Weather</span><span class="o">;</span>
+</span><span class='line'><span class="kn">import</span> <span class="nn">me.huteri.weather.model.service.WeatherApi</span><span class="o">;</span>
+</span><span class='line'><span class="kn">import</span> <span class="nn">me.huteri.weather.model.service.WeatherApiImpl</span><span class="o">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="kn">import</span> <span class="nn">static</span> <span class="n">org</span><span class="o">.</span><span class="na">mockito</span><span class="o">.</span><span class="na">Mockito</span><span class="o">.</span><span class="na">verify</span><span class="o">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="kd">public</span> <span class="kd">class</span> <span class="nc">MainPresenterImplTest</span> <span class="o">{</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="nd">@Mock</span>
+</span><span class='line'>    <span class="kd">private</span> <span class="n">MainView</span> <span class="n">mMainView</span><span class="o">;</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="nd">@Mock</span>
+</span><span class='line'>    <span class="kd">private</span> <span class="n">WeatherApiImpl</span> <span class="n">mWeatherApi</span><span class="o">;</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="cm">/**</span>
+</span><span class='line'><span class="cm">     * {@link ArgumentCaptor} is a powerful Mockito API to capture callback from background task and then perform assertion</span>
+</span><span class='line'><span class="cm">     */</span>
+</span><span class='line'>    <span class="nd">@Captor</span>
+</span><span class='line'>    <span class="kd">private</span> <span class="n">ArgumentCaptor</span><span class="o">&lt;</span><span class="n">WeatherApi</span><span class="o">.</span><span class="na">WeatherServiceCallback</span><span class="o">&gt;</span> <span class="n">mWeatherServiceCallback</span><span class="o">;</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="kd">private</span> <span class="n">MainPresenterImpl</span> <span class="n">mMainPresenter</span><span class="o">;</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="nd">@Before</span>
+</span><span class='line'>    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">setupMainPresenter</span><span class="o">()</span> <span class="o">{</span>
+</span><span class='line'>        <span class="n">MockitoAnnotations</span><span class="o">.</span><span class="na">initMocks</span><span class="o">(</span><span class="k">this</span><span class="o">);</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="n">mMainPresenter</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">MainPresenterImpl</span><span class="o">(</span><span class="n">mMainView</span><span class="o">,</span> <span class="n">mWeatherApi</span><span class="o">);</span>
+</span><span class='line'>    <span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="nd">@Test</span>
+</span><span class='line'>    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">testLoadWeatherData_andSucceed</span><span class="o">()</span> <span class="kd">throws</span> <span class="n">Exception</span> <span class="o">{</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="n">List</span><span class="o">&lt;</span><span class="n">Weather</span><span class="o">&gt;</span> <span class="n">sample</span> <span class="o">=</span> <span class="n">generateSampleWeatherList</span><span class="o">();</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="n">mMainPresenter</span><span class="o">.</span><span class="na">loadWeatherData</span><span class="o">();</span>
+</span><span class='line'>        <span class="n">verify</span><span class="o">(</span><span class="n">mMainView</span><span class="o">).</span><span class="na">showProgress</span><span class="o">();</span>
+</span><span class='line'>        <span class="n">verify</span><span class="o">(</span><span class="n">mWeatherApi</span><span class="o">).</span><span class="na">getAllWeathers</span><span class="o">(</span><span class="n">mWeatherServiceCallback</span><span class="o">.</span><span class="na">capture</span><span class="o">());</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="n">mWeatherServiceCallback</span><span class="o">.</span><span class="na">getValue</span><span class="o">().</span><span class="na">onSuccess</span><span class="o">(</span><span class="n">sample</span><span class="o">);</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="n">verify</span><span class="o">(</span><span class="n">mMainView</span><span class="o">).</span><span class="na">hideProgress</span><span class="o">();</span>
+</span><span class='line'>        <span class="n">verify</span><span class="o">(</span><span class="n">mMainView</span><span class="o">).</span><span class="na">showWeathers</span><span class="o">(</span><span class="n">sample</span><span class="o">);</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="nd">@Test</span>
+</span><span class='line'>    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">testLoadWeatherData_andFailed</span><span class="o">()</span> <span class="kd">throws</span> <span class="n">Exception</span> <span class="o">{</span>
+</span><span class='line'>        <span class="n">mMainPresenter</span><span class="o">.</span><span class="na">loadWeatherData</span><span class="o">();</span>
+</span><span class='line'>        <span class="n">verify</span><span class="o">(</span><span class="n">mMainView</span><span class="o">).</span><span class="na">showProgress</span><span class="o">();</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="n">verify</span><span class="o">(</span><span class="n">mWeatherApi</span><span class="o">).</span><span class="na">getAllWeathers</span><span class="o">(</span><span class="n">mWeatherServiceCallback</span><span class="o">.</span><span class="na">capture</span><span class="o">());</span>
+</span><span class='line'>        <span class="n">mWeatherServiceCallback</span><span class="o">.</span><span class="na">getValue</span><span class="o">().</span><span class="na">onFailure</span><span class="o">();</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="n">verify</span><span class="o">(</span><span class="n">mMainView</span><span class="o">).</span><span class="na">hideProgress</span><span class="o">();</span>
+</span><span class='line'>        <span class="n">verify</span><span class="o">(</span><span class="n">mMainView</span><span class="o">).</span><span class="na">showConnectionError</span><span class="o">();</span>
+</span><span class='line'>    <span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="nd">@Test</span>
+</span><span class='line'>    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">testClickWeatherItem_showsWeatherMessage</span><span class="o">()</span> <span class="kd">throws</span> <span class="n">Exception</span> <span class="o">{</span>
+</span><span class='line'>        <span class="n">Weather</span> <span class="n">item</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">Weather</span><span class="o">(</span><span class="mf">22.1f</span><span class="o">,</span> <span class="mi">3</span><span class="o">,</span> <span class="s">&quot;Jakarta&quot;</span><span class="o">,</span> <span class="s">&quot;Sample Description&quot;</span><span class="o">);</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="n">mMainPresenter</span><span class="o">.</span><span class="na">clickWeatherItem</span><span class="o">(</span><span class="n">item</span><span class="o">);</span>
+</span><span class='line'>        <span class="n">verify</span><span class="o">(</span><span class="n">mMainView</span><span class="o">).</span><span class="na">showWeatherClickedMessage</span><span class="o">(</span><span class="n">item</span><span class="o">);</span>
+</span><span class='line'>    <span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="kd">private</span> <span class="n">List</span><span class="o">&lt;</span><span class="n">Weather</span><span class="o">&gt;</span> <span class="nf">generateSampleWeatherList</span><span class="o">()</span> <span class="o">{</span>
+</span><span class='line'>        <span class="n">Weather</span> <span class="n">item1</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">Weather</span><span class="o">(</span><span class="mf">22.4f</span><span class="o">,</span> <span class="mi">3</span><span class="o">,</span> <span class="s">&quot;Jakarta&quot;</span><span class="o">,</span> <span class="s">&quot;Cloudy&quot;</span><span class="o">);</span>
+</span><span class='line'>        <span class="n">Weather</span> <span class="n">item2</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">Weather</span><span class="o">(</span><span class="mf">30.4f</span><span class="o">,</span> <span class="mi">3</span><span class="o">,</span> <span class="s">&quot;Singapore&quot;</span><span class="o">,</span> <span class="s">&quot;Raining&quot;</span><span class="o">);</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="n">List</span><span class="o">&lt;</span><span class="n">Weather</span><span class="o">&gt;</span> <span class="n">list</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ArrayList</span><span class="o">&lt;&gt;();</span>
+</span><span class='line'>        <span class="n">list</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">item1</span><span class="o">);</span>
+</span><span class='line'>        <span class="n">list</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">item2</span><span class="o">);</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="k">return</span> <span class="n">list</span><span class="o">;</span>
+</span><span class='line'>    <span class="o">}</span>
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The test uses mockito to mock some dependency such as MainView interface and the data layer. After understanding the basic of this simple MVP, continue on reading the article in references. It will give you a little bit more undestanding about MVP.</p>
+
+<p>The full source code is available on <a href="https://github.com/huteri/mvp-android">github</a></p>
+
+<p><strong>References</strong></p>
+
+<p><a href="https://codelabs.developers.google.com/codelabs/android-testing/index.html">https://codelabs.developers.google.com/codelabs/android-testing/index.html</a></p>
+
+<p><a href="http://fernandocejas.com/2014/09/03/architecting-android-the-clean-way/">http://fernandocejas.com/2014/09/03/architecting-android-the-clean-way/</a></p>
+
+<p><a href="https://www.youtube.com/watch?v=4L7G1uaQ67s">https://www.youtube.com/watch?v=4L7G1uaQ67s</a></p>
+
+<p><a href="http://www.thedroidsonroids.com/blog/android/example-realm-mvp-dagger/">http://www.thedroidsonroids.com/blog/android/example-realm-mvp-dagger/</a></p>
+</div>
+
+</article>
+
+	<div class="share">
+	<div class="addthis_toolbox addthis_default_style ">
+	
+	<a class="addthis_button_facebook_like" fb:like:layout="button_count"></a>
+	
+	
+	<a class="addthis_button_tweet"></a>
+	
+	
+	<a class="addthis_button_google_plusone" g:plusone:size="medium"></a>
+	
+	<a class="addthis_counter addthis_pill_style"></a>
+	</div>
+  <script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#pubid="></script>
+</div>
+
+
+
+<section id="comment">
+    <h1 class="title">Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+</section>
+</div>
+			</div>
+			<footer id="footer" class="inner">Copyright &copy; 2016
+
+    Huteri Manza
+
+</footer>
+		</div>
+	</div>
+	
+
+<script type="text/javascript">
+      var disqus_shortname = 'huterimanza';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://huteri.me/2016/03/25/the-easy-way-to-understand-mvp-in-android/';
+        var disqus_url = 'http://huteri.me/2016/03/25/the-easy-way-to-understand-mvp-in-android/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) {return;}
+  js = d.createElement(s); js.id = id; js.async = true;
+  js.src = "//connect.facebook.net/en_US/all.js#appId=212934732101925&xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var script = document.createElement('script'); script.type = 'text/javascript'; script.async = true;
+      script.src = 'https://apis.google.com/js/plusone.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(script, s);
+    })();
+  </script>
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+</body>
+</html>
