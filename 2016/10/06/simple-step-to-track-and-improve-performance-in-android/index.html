@@ -122,7 +122,7 @@
 
 <p>There are some tools to know how our app performs and whether our apps can load the ui 60frames/second.</p>
 
-<p>The first tool is profile gpu rendering. It&rsquo;s available in developer options in the phone, and we just show enable it.</p>
+<p>The first tool is profile gpu rendering. It&rsquo;s available in developer options in the phone, and we just need to enable it.</p>
 
 <p><img class="left" src="/images/post/enable_profile_gpu_rendering.png" width="250"></p>
 
@@ -138,7 +138,7 @@
 
 <p>Please note that it uses python, so make sure you have python installed, basically we only need to run python script inside android sdk folder, and then we set where we want to put the result (in this case is <code>~/Desktop</code>)</p>
 
-<p>I also set the duration for the data which is 10 seconds. While running this command, we just have to interaction in the app that we want to trace.</p>
+<p>I also set the duration for the data which is 10 seconds. While running this command, we just have to interact with the app that we want to trace.</p>
 
 <p>As an example, while tracing I am doing these actions</p>
 
@@ -175,7 +175,7 @@
 
 <p>We only need to look on the <code>bg</code> attribute, as in the screenshot, the LinearLayout has a background, but also the <code>ViewPager</code>, <code>RelativeLayout</code> and the <code>RecyclerView</code> of its child.</p>
 
-<p>So, if we have background in <code>RelativeLayout</code> why do we need background in <code>RecyclerView</code> since the background will not be visible to user?</p>
+<p>So, if we have background in <code>RecyclerView</code> why do we need background in <code>LinearLayout</code> since the background will not be visible to user?</p>
 
 <p>This is where we have to fix it. Sometimes engineers do not really care about overdraw, and they just put background everywhere, even it&rsquo;s not visible. This is causing android has to draw something useless.</p>
 
@@ -189,7 +189,7 @@
 
 <p>Let&rsquo;s look again on the result.</p>
 
-<p><img src="/images/post/overdraw-fix.png"></p>
+<p><img src="/images/post/overdraw-fix.png" width="250"></p>
 
 <p>It&rsquo;s better, and let&rsquo;s look on the systrace report</p>
 
