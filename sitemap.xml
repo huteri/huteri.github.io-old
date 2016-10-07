@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 <url>
+<loc>http://huteri.me/2016/10/06/simple-step-to-track-and-improve-performance-in-android/</loc>
+<lastmod>2016-10-06T17:02:28+07:00</lastmod>
+</url>
+<url>
 <loc>http://huteri.me/2016/03/25/the-easy-way-to-understand-mvp-in-android/</loc>
 <lastmod>2016-03-25T14:12:18+07:00</lastmod>
 </url>
@@ -36,5 +40,8 @@
 </url>
 <url>
 <loc>http://huteri.me/blog/categories/architecture/</loc>
+</url>
+<url>
+<loc>http://huteri.me/blog/categories/performance/</loc>
 </url>
 </urlset>

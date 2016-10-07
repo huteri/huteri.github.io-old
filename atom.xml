@@ -4,7 +4,7 @@
   <title><![CDATA[Huteri Manza Blog]]></title>
   <link href="http://huteri.me/atom.xml" rel="self"/>
   <link href="http://huteri.me/"/>
-  <updated>2016-10-04T16:28:56+07:00</updated>
+  <updated>2016-10-07T16:12:18+07:00</updated>
   <id>http://huteri.me/</id>
   <author>
     <name><![CDATA[Huteri Manza]]></name>
@@ -12,6 +12,101 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Simple Step to Track and Improve Performance in Android]]></title>
+    <link href="http://huteri.me/2016/10/06/simple-step-to-track-and-improve-performance-in-android/"/>
+    <updated>2016-10-06T17:02:28+07:00</updated>
+    <id>http://huteri.me/2016/10/06/simple-step-to-track-and-improve-performance-in-android</id>
+    <content type="html"><![CDATA[<p>It&rsquo;s been a while since I wrote my last article, today I would like to share more about something. Let&rsquo;s talk about performance. I will give a little sample how we can improve performance of our app with simple step.</p>
+
+<p>We know that good performance should not be lagging. By not lagging, it means that we should load the UI with 16ms/frame or 60 frames/second. The question is how do we achieve it?</p>
+
+<!--more-->
+
+
+<p>There are some factors why we can&rsquo;t load the ui in 16ms/frame such as layout/measuring time, overdraw, garbage collector, etc, and I will let you know how to find it.</p>
+
+<h3>Step 1: Identify the cause</h3>
+
+<p>There are some tools to know how our app performs and whether our apps can load the ui 60frames/second.</p>
+
+<p>The first tool is profile gpu rendering. It&rsquo;s available in developer options in the phone, and we just show enable it.</p>
+
+<p><img class="left" src="http://huteri.me/images/post/enable_profile_gpu_rendering.png" width="250"></p>
+
+<p><img src="http://huteri.me/images/post/gpu_performance.png" width="250"></p>
+
+<p>The green line indicate position for 16ms, we should not draw the ui above this line to achieve smooth and lag free app.</p>
+
+<p>Another tool I like more is <code>systrace</code>, I like it more because it gives you the more accurate and more explainable data. To use it, we only need to run this simple command</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ python ~/Library/Android/sdk/platform-tools/systrace/systrace.py --time=10 -o ~/Desktop/perform.html sched gfx view wm</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Please note that it uses python, so make sure you have python installed, basically we only need to run python script inside android sdk folder, and then we set where we want to put the result (in this case is <code>~/Desktop</code>)</p>
+
+<p>I also set the duration for the data which is 10 seconds. While running this command, we just have to interaction in the app that we want to trace.</p>
+
+<p>As an example, while tracing I am doing these actions</p>
+
+<div class="embed-video-container"><iframe src="//www.youtube.com/embed/Fx6KR38JEzs" allowfullscreen></iframe></div>
+
+
+<p>The result is like this</p>
+
+<p><img src="http://huteri.me/images/post/performance_before.gif"></p>
+
+<p>From this systrace report, focus on F letter at the bottom, these are frames. Green background means the frame was drew below 16ms. The other colours mean otherwise. So our goal here is to make all frames green.</p>
+
+<p>If we look on one of the frame in orange colour, we can see the reason below it.</p>
+
+<p><img src="http://huteri.me/images/post/performance_explanation.png"></p>
+
+<p>This is the reason why I love systrace. So, we have problem with long <code>view#draw()</code>. The most common cause of this issue is overdraw.</p>
+
+<h3>Step 2: Fixing overdraw</h3>
+
+<p>Now, let&rsquo;s see how we can fix overdraw. Overdraw is basically we draw the views more than we need to, so we have to find what views that do not need to be drawn, and remove it. You can read more about overdraw <a href="https://developer.android.com/studio/profile/dev-options-overdraw.html">here</a></p>
+
+<p>Enable overdraw tracing is simple, just visit developer options then enable Debug GPU overdraw</p>
+
+<p><img src="http://huteri.me/images/post/overdraw.png" width="250"></p>
+
+<p>It&rsquo;s pretty clear now, red means the views have been drawn more than 3 times.</p>
+
+<p><strong>How do we find the culprit?</strong></p>
+
+<p>There is new tool in Android Studio 2.2 called Layout Inspector, it&rsquo;s super handy tool to investigate overdraw beside the old hierarchy layout.</p>
+
+<p><img src="http://huteri.me/images/post/layout_inspector.png"></p>
+
+<p>We only need to look on the <code>bg</code> attribute, as in the screenshot, the LinearLayout has a background, but also the <code>ViewPager</code>, <code>RelativeLayout</code> and the <code>RecyclerView</code> of its child.</p>
+
+<p>So, if we have background in <code>RelativeLayout</code> why do we need background in <code>RecyclerView</code> since the background will not be visible to user?</p>
+
+<p>This is where we have to fix it. Sometimes engineers do not really care about overdraw, and they just put background everywhere, even it&rsquo;s not visible. This is causing android has to draw something useless.</p>
+
+<p>And also please note, that android by default will provide background to each activity, if we can use default one it will be better and we don&rsquo;t need to overdraw it.</p>
+
+<p>To solve this, I just have to remove unnecessary background</p>
+
+<p><img src="http://huteri.me/images/post/remove_background.png"></p>
+
+<h3>Step 3: Evaluate</h3>
+
+<p>Let&rsquo;s look again on the result.</p>
+
+<p>It&rsquo;s better, and let&rsquo;s look on the systrace report</p>
+
+<p><img src="http://huteri.me/images/post/performance_after.gif"></p>
+
+<p>Still not all green, but it&rsquo;s better than before, and the most important thing is that you can feel the difference. This is how you can improve user experience.</p>
+
+<p>Hope it helps.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[The Easy Way to Understand MVP in Android]]></title>
