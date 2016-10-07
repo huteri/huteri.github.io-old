@@ -4,7 +4,7 @@
   <title><![CDATA[Huteri Manza Blog]]></title>
   <link href="http://huteri.me/atom.xml" rel="self"/>
   <link href="http://huteri.me/"/>
-  <updated>2016-10-07T16:12:18+07:00</updated>
+  <updated>2016-10-07T16:27:56+07:00</updated>
   <id>http://huteri.me/</id>
   <author>
     <name><![CDATA[Huteri Manza]]></name>
@@ -97,6 +97,8 @@
 <h3>Step 3: Evaluate</h3>
 
 <p>Let&rsquo;s look again on the result.</p>
+
+<p><img src="http://huteri.me/images/post/overdraw-fix.png"></p>
 
 <p>It&rsquo;s better, and let&rsquo;s look on the systrace report</p>
 
