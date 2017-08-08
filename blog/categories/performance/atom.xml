@@ -4,7 +4,7 @@
   <title><![CDATA[Category: performance | Huteri Manza Blog]]></title>
   <link href="http://huteri.me/blog/categories/performance/atom.xml" rel="self"/>
   <link href="http://huteri.me/"/>
-  <updated>2016-10-07T19:29:58+07:00</updated>
+  <updated>2017-08-08T17:48:40+08:00</updated>
   <id>http://huteri.me/</id>
   <author>
     <name><![CDATA[Huteri Manza]]></name>
@@ -16,7 +16,7 @@
   <entry>
     <title type="html"><![CDATA[Simple Step to Track and Improve Performance in Android]]></title>
     <link href="http://huteri.me/2016/10/06/simple-step-to-track-and-improve-performance-in-android/"/>
-    <updated>2016-10-06T17:02:28+07:00</updated>
+    <updated>2016-10-06T18:02:28+08:00</updated>
     <id>http://huteri.me/2016/10/06/simple-step-to-track-and-improve-performance-in-android</id>
     <content type="html"><![CDATA[<p>It&rsquo;s been a while since I wrote my last article, today I would like to share more about something. Let&rsquo;s talk about performance. I will give a little sample how we can improve performance of our app with simple step.</p>
 

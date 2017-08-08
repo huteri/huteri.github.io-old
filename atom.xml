@@ -4,7 +4,7 @@
   <title><![CDATA[Huteri Manza Blog]]></title>
   <link href="http://huteri.me/atom.xml" rel="self"/>
   <link href="http://huteri.me/"/>
-  <updated>2016-10-07T19:29:58+07:00</updated>
+  <updated>2017-08-08T17:48:40+08:00</updated>
   <id>http://huteri.me/</id>
   <author>
     <name><![CDATA[Huteri Manza]]></name>
@@ -14,9 +14,115 @@
 
   
   <entry>
+    <title type="html"><![CDATA[Common Mistakes About Clean Architecture in Android]]></title>
+    <link href="http://huteri.me/2017/08/08/things-to-note-about-clean-code-in-android/"/>
+    <updated>2017-08-08T16:21:47+08:00</updated>
+    <id>http://huteri.me/2017/08/08/things-to-note-about-clean-code-in-android</id>
+    <content type="html"><![CDATA[<p>Let&rsquo;s talk about clean architecture in Android. What do you think about clean architecture? while we know that best practices for clean architecture in Android is changing really fast, literally fast. Look on what Google has done with its architecture components. it&rsquo;s changing the way to we write clean code in Android. For more detail click here</p>
+
+<!--more-->
+
+
+<p>But, it&rsquo;s not what I want to talk today. I want to talk more about common mistakes that people have done in implementing clean architecture.</p>
+
+<h3>1. Not able to move logic from Activity/Fragment to Presenter/ViewModel</h3>
+
+<p>I believe that view must be passive, it means that we should make it as dumb as possible, so there is no way we can have bug in a view code. Every method in a view is supposed to do exactly one thing, no more, no if, nothing.</p>
+
+<p>Let&rsquo;s look on a good example</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="kd">interface</span> <span class="nc">LoginView</span> <span class="kd">extends</span> <span class="n">BaseView</span> <span class="o">{</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="kt">void</span> <span class="nf">showPasswordInvalid</span><span class="o">();</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="kt">void</span> <span class="nf">showUsernameRequired</span><span class="o">();</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="kt">void</span> <span class="nf">navigateToMainPage</span><span class="o">();</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="kt">void</span> <span class="nf">showLoginError</span><span class="o">();</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="kt">void</span> <span class="nf">showLoginSucceed</span><span class="o">();</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="kt">void</span> <span class="nf">showInputOtpDialog</span><span class="o">();</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="kt">void</span> <span class="nf">showAlreadyLogin</span><span class="o">();</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Basically, a method is verbose enough for you to understand so there is no room for error. but let&rsquo;s see some of the mistakes to give us a picture</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="kd">interface</span> <span class="nc">LoginView</span> <span class="kd">extends</span> <span class="n">BaseView</span> <span class="o">{</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="kt">void</span> <span class="nf">showError</span><span class="o">(</span><span class="n">Error</span> <span class="n">error</span><span class="o">);</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="kt">void</span> <span class="nf">navigateToActivity</span><span class="o">(</span><span class="n">Activity</span> <span class="n">activity</span><span class="o">)</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Now, if we can imagine the implementation, you see that the methods not only have  1 responsibility, but more than that. <code>showError(Error error)</code> method has to parse the error first, and then decide how to show the error. it&rsquo;s more than 1 responsibility.</p>
+
+<p>Then came a question, the good example above shows us that we have to write <code>Toast.makeText</code> for every method that needs to show error message. it breaks the principle of DRY (don&rsquo;t repeat yourself), yes, and no, yes, we will have same functionality for every method, and no, we can improve it by creating new method in the view to show toast.</p>
+
+<p>I know it&rsquo;s lot of boilerplate, but it&rsquo;s worth it if we think about how easy it will be to create unit test with verbose methods.</p>
+
+<h3>2. Not to Think about Unit Test</h3>
+
+<p>Unit test is the most useful way to make our code clean. Even if we just think about it, it will improve our code a lot. One of the tip is to always think about unit test when you write code. Think about how we are going to test it later. This is the least minimum, I mean if you do TDD, then it&rsquo;s better. No need to follow this.</p>
+
+<p>Basically, by only thinking about unit test, we <strong>will not</strong>:</p>
+
+<h4>a. put android framework code in the presenter/viewmodel</h4>
+
+<h4>b. put logic in activity/fragment because we are trying to achieve 100% coverage of the logic</h4>
+
+<h4>c. put complex code, but instead make everything simple</h4>
+
+<p>Let me know what you think later after you tried it.</p>
+
+<h3>3. Not to Think About Modularity/Separation</h3>
+
+<p>One of the thing about clean architecture is separation. Every layer of clean architecture has their own responsibility and they don&rsquo;t know each other, they only want to know that they can get the data anyhow.</p>
+
+<p>With this separation, we can change the inner logic inside of one the layer, and the other layer will not care as long as it can get the data. One of the useful example is local database. We know that we have lot of kind of local database in Android such as Realm, Room, and Sqlite, and this thing will change to something better in the future. So if we already implemented Realm, and how would we change to room?</p>
+
+<p>This is where separations looks useful. With a clear separation, we could change to room easily without too much refactor.</p>
+
+<p>So, always think about separation in mind, think about how we could change this library to something better in the future, think about maintainability over features.</p>
+]]></content>
+  </entry>
+  
+  <entry>
     <title type="html"><![CDATA[Simple Step to Track and Improve Performance in Android]]></title>
     <link href="http://huteri.me/2016/10/06/simple-step-to-track-and-improve-performance-in-android/"/>
-    <updated>2016-10-06T17:02:28+07:00</updated>
+    <updated>2016-10-06T18:02:28+08:00</updated>
     <id>http://huteri.me/2016/10/06/simple-step-to-track-and-improve-performance-in-android</id>
     <content type="html"><![CDATA[<p>It&rsquo;s been a while since I wrote my last article, today I would like to share more about something. Let&rsquo;s talk about performance. I will give a little sample how we can improve performance of our app with simple step.</p>
 
@@ -113,7 +219,7 @@
   <entry>
     <title type="html"><![CDATA[The Easy Way to Understand MVP in Android]]></title>
     <link href="http://huteri.me/2016/03/25/the-easy-way-to-understand-mvp-in-android/"/>
-    <updated>2016-03-25T14:12:18+07:00</updated>
+    <updated>2016-03-25T15:12:18+08:00</updated>
     <id>http://huteri.me/2016/03/25/the-easy-way-to-understand-mvp-in-android</id>
     <content type="html"><![CDATA[<p>Today, I would like to talk about MVP in android. I know that there are a lot of resources recently talking about MVP in android. MVP is now considered as the best architecture available in Android Development. I tried to learn about this clean archictecture, and I admit it is quite hard to learn for newbie like me.</p>
 
@@ -776,7 +882,7 @@
   <entry>
     <title type="html"><![CDATA[Handling Dynamic JSONAPI Format With Retrofit in Android]]></title>
     <link href="http://huteri.me/2015/10/16/handling-dynamic-jsonapi-format-with-retrofit-in-android/"/>
-    <updated>2015-10-16T13:31:35+07:00</updated>
+    <updated>2015-10-16T14:31:35+08:00</updated>
     <id>http://huteri.me/2015/10/16/handling-dynamic-jsonapi-format-with-retrofit-in-android</id>
     <content type="html"><![CDATA[<p>Sometimes working with json can be frustrating if we don’t understand how the dependencies work such as retrofit and JSONAPI.org</p>
 
@@ -1242,7 +1348,7 @@
   <entry>
     <title type="html"><![CDATA[Beware of Setting Image Resource for Preview in XML for Android]]></title>
     <link href="http://huteri.me/2015/07/11/beware-of-setting-image-resources-for-preview-purpose-in-xml/"/>
-    <updated>2015-07-11T13:31:54+07:00</updated>
+    <updated>2015-07-11T14:31:54+08:00</updated>
     <id>http://huteri.me/2015/07/11/beware-of-setting-image-resources-for-preview-purpose-in-xml</id>
     <content type="html"><![CDATA[<p>For the past hours, I had been struggling to find the cause of <code>OutofMemoryException</code>. I know It’s really common issue with image in Android. I used to have this issue in my first 6 months of learning Android and I thought I had ate enough but guess what, seems like it’s not happenning today.</p>
 
@@ -1298,7 +1404,7 @@ Hope it’s usefull.</p>
   <entry>
     <title type="html"><![CDATA[Hello World]]></title>
     <link href="http://huteri.me/2015/06/18/hello-world/"/>
-    <updated>2015-06-18T13:21:34+07:00</updated>
+    <updated>2015-06-18T14:21:34+08:00</updated>
     <id>http://huteri.me/2015/06/18/hello-world</id>
     <content type="html"><![CDATA[<p>Hello, I am Huteri Manza, and this is my blog.
 I always think that the people who know the information are the only people who need to share it.

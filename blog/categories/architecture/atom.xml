@@ -4,7 +4,7 @@
   <title><![CDATA[Category: architecture | Huteri Manza Blog]]></title>
   <link href="http://huteri.me/blog/categories/architecture/atom.xml" rel="self"/>
   <link href="http://huteri.me/"/>
-  <updated>2016-10-07T19:29:58+07:00</updated>
+  <updated>2017-08-08T17:48:40+08:00</updated>
   <id>http://huteri.me/</id>
   <author>
     <name><![CDATA[Huteri Manza]]></name>
@@ -14,9 +14,91 @@
 
   
   <entry>
+    <title type="html"><![CDATA[Common Mistakes About Clean Architecture in Android]]></title>
+    <link href="http://huteri.me/2017/08/08/things-to-note-about-clean-code-in-android/"/>
+    <updated>2017-08-08T16:21:47+08:00</updated>
+    <id>http://huteri.me/2017/08/08/things-to-note-about-clean-code-in-android</id>
+    <content type="html"><![CDATA[<p>Let&rsquo;s talk about clean architecture in Android. What do you think about clean architecture? while we know that best practices for clean architecture in Android is changing really fast, literally fast. Look on what Google has done with its architecture components. it&rsquo;s changing the way to we write clean code in Android. For more detail click here</p>
+
+<!--more-->
+
+
+<p>But, it&rsquo;s not what I want to talk today. I want to talk more about common mistakes that people have done in implementing clean architecture.</p>
+
+<h3>1. Not able to move logic from Activity/Fragment to Presenter/ViewModel</h3>
+
+<p>I believe that view must be passive, it means that we should make it as dumb as possible, so there is no way we can have bug in a view code. Every method in a view is supposed to do exactly one thing, no more, no if, nothing.</p>
+
+<p>Let&rsquo;s look on a good example</p>
+
+<pre><code class="java">
+interface LoginView extends BaseView {
+
+    void showPasswordInvalid();
+
+    void showUsernameRequired();
+
+    void navigateToMainPage();
+
+    void showLoginError();
+
+    void showLoginSucceed();
+
+    void showInputOtpDialog();
+
+    void showAlreadyLogin();
+
+}
+</code></pre>
+
+<p>Basically, a method is verbose enough for you to understand so there is no room for error. but let&rsquo;s see some of the mistakes to give us a picture</p>
+
+<pre><code class="java">
+interface LoginView extends BaseView {
+
+    void showError(Error error);
+
+    void navigateToActivity(Activity activity)
+
+}
+</code></pre>
+
+<p>Now, if we can imagine the implementation, you see that the methods not only have  1 responsibility, but more than that. <code>showError(Error error)</code> method has to parse the error first, and then decide how to show the error. it&rsquo;s more than 1 responsibility.</p>
+
+<p>Then came a question, the good example above shows us that we have to write <code>Toast.makeText</code> for every method that needs to show error message. it breaks the principle of DRY (don&rsquo;t repeat yourself), yes, and no, yes, we will have same functionality for every method, and no, we can improve it by creating new method in the view to show toast.</p>
+
+<p>I know it&rsquo;s lot of boilerplate, but it&rsquo;s worth it if we think about how easy it will be to create unit test with verbose methods.</p>
+
+<h3>2. Not to Think about Unit Test</h3>
+
+<p>Unit test is the most useful way to make our code clean. Even if we just think about it, it will improve our code a lot. One of the tip is to always think about unit test when you write code. Think about how we are going to test it later. This is the least minimum, I mean if you do TDD, then it&rsquo;s better. No need to follow this.</p>
+
+<p>Basically, by only thinking about unit test, we <strong>will not</strong>:</p>
+
+<h4>a. put android framework code in the presenter/viewmodel</h4>
+
+<h4>b. put logic in activity/fragment because we are trying to achieve 100% coverage of the logic</h4>
+
+<h4>c. put complex code, but instead make everything simple</h4>
+
+<p>Let me know what you think later after you tried it.</p>
+
+<h3>3. Not to Think About Modularity/Separation</h3>
+
+<p>One of the thing about clean architecture is separation. Every layer of clean architecture has their own responsibility and they don&rsquo;t know each other, they only want to know that they can get the data anyhow.</p>
+
+<p>With this separation, we can change the inner logic inside of one the layer, and the other layer will not care as long as it can get the data. One of the useful example is local database. We know that we have lot of kind of local database in Android such as Realm, Room, and Sqlite, and this thing will change to something better in the future. So if we already implemented Realm, and how would we change to room?</p>
+
+<p>This is where separations looks useful. With a clear separation, we could change to room easily without too much refactor.</p>
+
+<p>So, always think about separation in mind, think about how we could change this library to something better in the future, think about maintainability over features.</p>
+]]></content>
+  </entry>
+  
+  <entry>
     <title type="html"><![CDATA[The Easy Way to Understand MVP in Android]]></title>
     <link href="http://huteri.me/2016/03/25/the-easy-way-to-understand-mvp-in-android/"/>
-    <updated>2016-03-25T14:12:18+07:00</updated>
+    <updated>2016-03-25T15:12:18+08:00</updated>
     <id>http://huteri.me/2016/03/25/the-easy-way-to-understand-mvp-in-android</id>
     <content type="html"><![CDATA[<p>Today, I would like to talk about MVP in android. I know that there are a lot of resources recently talking about MVP in android. MVP is now considered as the best architecture available in Android Development. I tried to learn about this clean archictecture, and I admit it is quite hard to learn for newbie like me.</p>
 

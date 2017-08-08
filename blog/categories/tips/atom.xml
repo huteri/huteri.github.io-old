@@ -4,7 +4,7 @@
   <title><![CDATA[Category: tips | Huteri Manza Blog]]></title>
   <link href="http://huteri.me/blog/categories/tips/atom.xml" rel="self"/>
   <link href="http://huteri.me/"/>
-  <updated>2016-10-07T19:29:58+07:00</updated>
+  <updated>2017-08-08T17:48:40+08:00</updated>
   <id>http://huteri.me/</id>
   <author>
     <name><![CDATA[Huteri Manza]]></name>
@@ -16,7 +16,7 @@
   <entry>
     <title type="html"><![CDATA[Handling Dynamic JSONAPI Format With Retrofit in Android]]></title>
     <link href="http://huteri.me/2015/10/16/handling-dynamic-jsonapi-format-with-retrofit-in-android/"/>
-    <updated>2015-10-16T13:31:35+07:00</updated>
+    <updated>2015-10-16T14:31:35+08:00</updated>
     <id>http://huteri.me/2015/10/16/handling-dynamic-jsonapi-format-with-retrofit-in-android</id>
     <content type="html"><![CDATA[<p>Sometimes working with json can be frustrating if we don’t understand how the dependencies work such as retrofit and JSONAPI.org</p>
 
@@ -272,7 +272,7 @@ private void addIncludedOrderedItemToList(ArrayList&lt;IncludedModel&gt; include
   <entry>
     <title type="html"><![CDATA[Beware of Setting Image Resource for Preview in XML for Android]]></title>
     <link href="http://huteri.me/2015/07/11/beware-of-setting-image-resources-for-preview-purpose-in-xml/"/>
-    <updated>2015-07-11T13:31:54+07:00</updated>
+    <updated>2015-07-11T14:31:54+08:00</updated>
     <id>http://huteri.me/2015/07/11/beware-of-setting-image-resources-for-preview-purpose-in-xml</id>
     <content type="html"><![CDATA[<p>For the past hours, I had been struggling to find the cause of <code>OutofMemoryException</code>. I know It’s really common issue with image in Android. I used to have this issue in my first 6 months of learning Android and I thought I had ate enough but guess what, seems like it’s not happenning today.</p>
 

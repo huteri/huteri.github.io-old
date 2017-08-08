@@ -1,24 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 <url>
+<loc>http://huteri.me/2017/08/08/things-to-note-about-clean-code-in-android/</loc>
+<lastmod>2017-08-08T16:21:47+08:00</lastmod>
+</url>
+<url>
 <loc>http://huteri.me/2016/10/06/simple-step-to-track-and-improve-performance-in-android/</loc>
-<lastmod>2016-10-06T17:02:28+07:00</lastmod>
+<lastmod>2016-10-06T18:02:28+08:00</lastmod>
 </url>
 <url>
 <loc>http://huteri.me/2016/03/25/the-easy-way-to-understand-mvp-in-android/</loc>
-<lastmod>2016-03-25T14:12:18+07:00</lastmod>
+<lastmod>2016-03-25T15:12:18+08:00</lastmod>
 </url>
 <url>
 <loc>http://huteri.me/2015/10/16/handling-dynamic-jsonapi-format-with-retrofit-in-android/</loc>
-<lastmod>2015-10-16T13:31:35+07:00</lastmod>
+<lastmod>2015-10-16T14:31:35+08:00</lastmod>
 </url>
 <url>
 <loc>http://huteri.me/2015/07/11/beware-of-setting-image-resources-for-preview-purpose-in-xml/</loc>
-<lastmod>2015-07-11T13:31:54+07:00</lastmod>
+<lastmod>2015-07-11T14:31:54+08:00</lastmod>
 </url>
 <url>
 <loc>http://huteri.me/2015/06/18/hello-world/</loc>
-<lastmod>2015-06-18T13:21:34+07:00</lastmod>
+<lastmod>2015-06-18T14:21:34+08:00</lastmod>
 </url>
 <url>
 <loc>http://huteri.me/blog/archives/</loc>
@@ -43,5 +47,8 @@
 </url>
 <url>
 <loc>http://huteri.me/blog/categories/performance/</loc>
+</url>
+<url>
+<loc>http://huteri.me/blog/categories/clean/</loc>
 </url>
 </urlset>
