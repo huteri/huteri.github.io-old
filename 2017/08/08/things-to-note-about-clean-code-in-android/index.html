@@ -159,7 +159,7 @@
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>Basically, a method is verbose enough for you to understand so there is no room for error. but let&rsquo;s see some of the mistakes to give us a picture</p>
+<p>Basically, a method is verbose enough for us to understand so there is no room for error. but let&rsquo;s see some of the mistakes to give us a picture</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -202,7 +202,7 @@
 
 <p>One of the thing about clean architecture is separation. Every layer of clean architecture has their own responsibility and they don&rsquo;t know each other, they only want to know that they can get the data they need.</p>
 
-<p>With this separation, we can change the inner logic inside of one the layer, and the other layer will not care as long as it can get the data. One of the useful example is local database. There are a lot of way implementing local database in android such as Realm, Room, and Sqlite, and this thing will change to something better in the future. So if we already implemented Realm, then how would we change it to room later?</p>
+<p>With this separation, we can change the inner logic inside of one the layer, and the other layer will not care as long as it can get the data. One of the useful example is local database. There are a lot of ways implementing local database in android such as Realm, Room, and Sqlite, and this thing will change to something better in the future. So if we already implemented Realm, then how would we change it to room later?</p>
 
 <p>This is where separations looks useful. With a clear separation, we could change to room easily without too much refactoring.</p>
 

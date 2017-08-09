@@ -4,7 +4,7 @@
   <title><![CDATA[Category: clean | Huteri Manza Blog]]></title>
   <link href="http://huteri.me/blog/categories/clean/atom.xml" rel="self"/>
   <link href="http://huteri.me/"/>
-  <updated>2017-08-09T10:03:53+08:00</updated>
+  <updated>2017-08-09T10:05:24+08:00</updated>
   <id>http://huteri.me/</id>
   <author>
     <name><![CDATA[Huteri Manza]]></name>
@@ -51,7 +51,7 @@ interface LoginView extends BaseView {
 }
 </code></pre>
 
-<p>Basically, a method is verbose enough for you to understand so there is no room for error. but let&rsquo;s see some of the mistakes to give us a picture</p>
+<p>Basically, a method is verbose enough for us to understand so there is no room for error. but let&rsquo;s see some of the mistakes to give us a picture</p>
 
 <pre><code class="java">
 interface LoginView extends BaseView {
@@ -87,7 +87,7 @@ interface LoginView extends BaseView {
 
 <p>One of the thing about clean architecture is separation. Every layer of clean architecture has their own responsibility and they don&rsquo;t know each other, they only want to know that they can get the data they need.</p>
 
-<p>With this separation, we can change the inner logic inside of one the layer, and the other layer will not care as long as it can get the data. One of the useful example is local database. There are a lot of way implementing local database in android such as Realm, Room, and Sqlite, and this thing will change to something better in the future. So if we already implemented Realm, then how would we change it to room later?</p>
+<p>With this separation, we can change the inner logic inside of one the layer, and the other layer will not care as long as it can get the data. One of the useful example is local database. There are a lot of ways implementing local database in android such as Realm, Room, and Sqlite, and this thing will change to something better in the future. So if we already implemented Realm, then how would we change it to room later?</p>
 
 <p>This is where separations looks useful. With a clear separation, we could change to room easily without too much refactoring.</p>
 
