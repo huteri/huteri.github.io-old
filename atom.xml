@@ -4,7 +4,7 @@
   <title><![CDATA[Huteri Manza Blog]]></title>
   <link href="http://huteri.me/atom.xml" rel="self"/>
   <link href="http://huteri.me/"/>
-  <updated>2017-08-09T09:59:23+08:00</updated>
+  <updated>2017-08-09T10:03:53+08:00</updated>
   <id>http://huteri.me/</id>
   <author>
     <name><![CDATA[Huteri Manza]]></name>
@@ -14,7 +14,7 @@
 
   
   <entry>
-    <title type="html"><![CDATA[Common Mistakes Doing Clean Architecture in Android]]></title>
+    <title type="html"><![CDATA[Common Mistakes When Doing Clean Architecture in Android]]></title>
     <link href="http://huteri.me/2017/08/08/things-to-note-about-clean-code-in-android/"/>
     <updated>2017-08-08T16:21:47+08:00</updated>
     <id>http://huteri.me/2017/08/08/things-to-note-about-clean-code-in-android</id>
