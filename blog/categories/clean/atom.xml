@@ -4,7 +4,7 @@
   <title><![CDATA[Category: clean | Huteri Manza Blog]]></title>
   <link href="http://huteri.me/blog/categories/clean/atom.xml" rel="self"/>
   <link href="http://huteri.me/"/>
-  <updated>2018-03-19T15:18:57+08:00</updated>
+  <updated>2018-03-19T15:22:10+08:00</updated>
   <id>http://huteri.me/</id>
   <author>
     <name><![CDATA[Huteri Manza]]></name>
@@ -18,7 +18,7 @@
     <link href="http://huteri.me/2017/08/08/things-to-note-about-clean-code-in-android/"/>
     <updated>2017-08-08T16:21:47+08:00</updated>
     <id>http://huteri.me/2017/08/08/things-to-note-about-clean-code-in-android</id>
-    <content type="html"><![CDATA[<p>It&rsquo;s been a while. Let&rsquo;s talk about clean architecture in Android. We know that best practice for clean architecture is changing really fast. Look on what Google has done with its architecture components. For more detail about architecture components, <a href="https://developer.android.com/topic/libraries/architecture/index.html">click here</a></p>
+    <content type="html"><![CDATA[<p>It&rsquo;s been a while. Let&rsquo;s talk about clean architecture in Android. We know that best practices for clean architecture are changing fast. Look on what Google has done with its architecture components. For more detail about architecture components, <a href="https://developer.android.com/topic/libraries/architecture/index.html">click here</a></p>
 
 <!--more-->
 
