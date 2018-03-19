@@ -4,7 +4,7 @@
   <title><![CDATA[Huteri Manza Blog]]></title>
   <link href="http://huteri.me/atom.xml" rel="self"/>
   <link href="http://huteri.me/"/>
-  <updated>2017-08-09T10:22:55+08:00</updated>
+  <updated>2018-03-19T15:18:57+08:00</updated>
   <id>http://huteri.me/</id>
   <author>
     <name><![CDATA[Huteri Manza]]></name>
@@ -18,12 +18,12 @@
     <link href="http://huteri.me/2017/08/08/things-to-note-about-clean-code-in-android/"/>
     <updated>2017-08-08T16:21:47+08:00</updated>
     <id>http://huteri.me/2017/08/08/things-to-note-about-clean-code-in-android</id>
-    <content type="html"><![CDATA[<p>Let&rsquo;s talk about clean architecture in Android. What do you think about clean architecture? while we know that best practice for clean architecture is changing really fast, literally fast. Look on what Google has done with its architecture components. For more detail about architecture components, <a href="https://developer.android.com/topic/libraries/architecture/index.html">click here</a></p>
+    <content type="html"><![CDATA[<p>It&rsquo;s been a while. Let&rsquo;s talk about clean architecture in Android. We know that best practice for clean architecture is changing really fast. Look on what Google has done with its architecture components. For more detail about architecture components, <a href="https://developer.android.com/topic/libraries/architecture/index.html">click here</a></p>
 
 <!--more-->
 
 
-<p>But, it&rsquo;s not that I wanted to talk today. I want to talk more about common mistakes that people have done implementing clean architecture.</p>
+<p>But, it&rsquo;s not what I want to talk today. Let&rsquo;s talk more about common mistakes when doing clean archictecture in Android.</p>
 
 <h3>1. Not able to move logic from Activity/Fragment to Presenter/ViewModel</h3>
 
@@ -87,7 +87,7 @@
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>Now, if we can imagine the implementation, you see that the methods not only have  1 responsibility, but more than that. <code>showError(Error error)</code> method has to parse the error first, and then decide how to show the error. it&rsquo;s more than 1 responsibility.</p>
+<p>Now, imagine the implementation, the methods have more than 1 responsibility. <code>showError(Error error)</code> method has to parse the error first, and then decide how to show the error. it&rsquo;s more than 1 responsibility.</p>
 
 <p>Then came a question, the good example above shows us that we have to write <code>Toast.makeText</code> for every method that needs to show error message. it breaks the principle of DRY (don&rsquo;t repeat yourself), yes, and no. Yes, we will have same functionality for every method, and no, we can improve it by creating new method in the view to show toast.</p>
 
@@ -109,7 +109,7 @@
 
 <h3>3. Not to Think About Modularity/Separation</h3>
 
-<p>One of the thing about clean architecture is separation. Every layer of clean architecture has their own responsibility and they don&rsquo;t know each other, they only want to know that they can get the data they need.</p>
+<p>One of the thing about clean architecture is separation. Every layer of clean architecture has their own responsibility and they only know layers below them, they only want to know that they can get the data they need.</p>
 
 <p>With this separation, we can change the inner logic inside of one the layer, and the other layer will not care as long as it can get the data. One of the useful example is local database. There are a lot of ways implementing local database in android such as Realm, Room, and Sqlite, and this thing will change to something better in the future. So if we already implemented Realm, then how would we change it to room later?</p>
 
