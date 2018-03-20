@@ -1,0 +1,381 @@
+
+<!DOCTYPE HTML>
+
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<title>Learning Custom Views in Android - Huteri Manza Blog</title>
+	<meta name="author" content="Huteri Manza">
+
+	
+	<meta name="description" content="Learning Custom Views in Android I just created my first custom view, and I would like to share what I learned and hopefully this can help someone &hellip;">
+	
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<link href="/atom.xml" rel="alternate" title="Huteri Manza Blog" type="application/atom+xml">
+	
+	<link rel="canonical" href="http://huteri.me/2018/03/19/learning-custom-views-in-android/">
+	<link href="/favicon.png" rel="shortcut icon">
+	<link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<link href="/stylesheets/font-awesome.min.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	<link href='http://fonts.googleapis.com/css?family=Nunito:400,300,700' rel='stylesheet' type='text/css'>
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+	
+  
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', 'UA-65050731-1']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+	</script>
+
+
+</head>
+
+
+<body>
+	<div class="container">
+		<div class="left-col">
+			<div class="intrude-less">
+			<header id="header" class="inner"><div class="profilepic">
+	
+	<script src="/javascripts/md5.js"></script>
+	<script type="text/javascript">
+		$(function(){
+			$('.profilepic').append("<img src='/images/profile.jpg' alt='Profile Picture' style='width: 160px;' />");
+		});
+	</script>
+	
+</div>
+
+<nav id="main-nav"><ul class="main">
+    <li><a href="/">Home</a></li>
+    <li><a href="/about">About</a></li>
+    <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+<section class="aboutme">
+  <p>
+    Written by Huteri Manza and it's mostly talking about Android Development tips and tricks
+  </p>
+</section>
+</nav>
+<nav id="sub-nav">
+	<div class="social">
+		
+		
+		
+			<a class="google" href="https://plus.google.com/huterimanza" rel="author" title="Google+">Google+</a>
+		
+		
+			<a class="twitter" href="http://twitter.com/huterimanza" title="Twitter">Twitter</a>
+		
+		
+			<a class="github" href="https://github.com/huteri" title="GitHub">GitHub</a>
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+    	
+    	
+			<a class="rss" href="/atom.xml" title="RSS">RSS</a>
+		
+	</div>
+</nav>
+</header>				
+			</div>
+		</div>	
+		<div class="mid-col">
+			
+				
+			
+			<div class="mid-col-container">
+				<div id="content" class="inner"><article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+	<h1 class="title" itemprop="name">Learning Custom Views in Android</h1>
+	<div class="entry-content" itemprop="articleBody"><p>I just created my first custom view, and I would like to share what I learned and hopefully this can help someone to create their own custom view. Basically, this custom view is simple analog clock view, where we can put in our xml then it will just work. Here is the screenshot</p>
+
+<!--more-->
+
+
+<p><img src="/images/post/simple_analog_clock.png"></p>
+
+<p>It&rsquo;s available in github and everyone can use this as library</p>
+
+<p><a href="https://github.com/huteri/analogclock">https://github.com/huteri/analogclock</a></p>
+
+<p>Let&rsquo;s see the components I used to create the view.</p>
+
+<h4>1. <code>Canvas.drawArc()</code></h4>
+
+<p>This is a way to draw an arc. We can draw complete circle with this method. From the documentation we can see this</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>drawArc(RectF oval, float startAngle, float sweepAngle, boolean useCenter, Paint paint)
+</span><span class='line'>// Draw the specified arc, which will be scaled to fit inside the specified oval.</span></code></pre></td></tr></table></div></figure>
+
+
+<p>In an circle we have angle, so startAngle is starting point to draw the arc. SweepAngle is the how long the arc will be. The zero in startAngle starts from 3 o'clock, so if we put -90 as startAngle, and 180 as sweepAngle, then android will draw half oval from 12 o'clock to 6 o'clock.</p>
+
+<p>So, what is RectF in this case? It&rsquo;s like the canvas where we want to draw the circle. The arc will follow the form of this rectF, to draw a circle we will need to have a square as rectF which has 4 equal sides.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>rectF.apply {
+</span><span class='line'>  set(centerX - 400, centerY - 400, centerX + 400, centerY + 400)
+</span><span class='line'>}
+</span><span class='line'>
+</span><span class='line'>it.drawArc(rectF, -90f, 180f, false, paint.apply {
+</span><span class='line'>  color = Color.parseColor("#95a5a6")
+</span><span class='line'>  strokeWidth = 20f
+</span><span class='line'>  style = Paint.Style.STROKE
+</span><span class='line'>})</span></code></pre></td></tr></table></div></figure>
+
+
+<p>We create a rectF with size 400 in all 4 sides, then draw an arc inside of this</p>
+
+<p><img src="/images/post/custom_view_arc.png" width="250"></p>
+
+<h4>2. Draw Moving Hands in Analog Clock</h4>
+
+<p>We have moving hands in the analog clock for hour, minute, and second. How to draw this? Basically the hands are just rectangular with rounded corners. We can draw rounded rectangular easily with <code>Canvas.drawRoundRect()</code> api. But how to draw rounded rect to point to 5 o'clock? This is where <code>Canvas.save()</code> and <code>Canvas.rotate()</code> come to play.</p>
+
+<p>We basically save the snapshot of the current canvas with <code>Canvas.save()</code>. I would say this thing saves the position of each view inside of the canvas. First we draw the rounded rectangular to 12  o'clock, then rotate the canvas 150 degrees to get it to 5 o'clock. (every hour is 30 degrees)</p>
+
+<p>Call <code>Canvas.restore</code> to restore position of each view from last save. it won&rsquo;t restore the rounded rect because we save before we draw this.</p>
+
+<h4>3. Touch Area and Selected Area</h4>
+
+<p>This is one the hardest part in this custom view. This is about how to make our custom view clickable and respond to our touch.</p>
+
+<p>So, how do we define touch area for specific view? By using Region. Defining a region is basically the same like we draw a view. We can use the arc as the region, but we should make the region in such way that the user can easily touch and select the item.</p>
+
+<p>That&rsquo;s why we need <code>Path</code> instead of only an arc, because with <code>Path</code> we can define the touch area we want instead of just an arc.</p>
+
+<p>Look on the screenshot for custom view again, we want to make sure that user can easily select the data. So we are going to make touch area from the center of the view to arc. It&rsquo;s like slice of pizza. Here is to give you picture.</p>
+
+<p><img src="/images/post/custom_view_touch_area.png" width="250"></p>
+
+<p>The slices with grey background are the touch area, so whenever user touches inside of this area, the item will be selected.</p>
+
+<p>Remember, in order to define touch area, we need to know how to draw it. Let&rsquo;s see how we can define this area.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>var pathSelected = Path()
+</span><span class='line'>
+</span><span class='line'>rectFSelected.apply {
+</span><span class='line'>    set(centerX - 400, centerY - 400, centerX + 400, centerY + 400)
+</span><span class='line'>}
+</span><span class='line'>
+</span><span class='line'>pathSelected.arcTo(rectFSelected, startAngle, sweepAngle)
+</span><span class='line'>
+</span><span class='line'>rectFSelected.apply {
+</span><span class='line'>    set(centerX, centerY, centerX, centerY)
+</span><span class='line'>}
+</span><span class='line'>
+</span><span class='line'>pathSelected.arcTo(rectFSelected, 0f, 0f)
+</span><span class='line'>pathSelected.close()
+</span><span class='line'>
+</span><span class='line'>pathSelected.computeBounds(rectFSelected, true)</span></code></pre></td></tr></table></div></figure>
+
+
+<p>First, we are going to define the first arc which is the curve of the slice, and then define the second arc, but if you look closely, the rect for second arc is the center of the view which is (0, 0). So there is actually no arc. It&rsquo;s just telling path to use this center view. <code>Path.close()</code> will close those 2 arcs with lines. That&rsquo;s how we get the slice of the pie.</p>
+
+<p>That&rsquo;s it. we get the <code>Path</code> and then we only need to set this path as region, and put it inside of the data list.</p>
+
+<p>Override <code>onTouchEvent()</code> then we check whether the touch point is inside of one of the regions, then call sliceClickListener callback then call postInvalidate() to draw the selected area.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'> override fun onTouchEvent(event: MotionEvent?): Boolean {
+</span><span class='line'>
+</span><span class='line'>    var point = Point()
+</span><span class='line'>    point.x = event!!.x.toInt()
+</span><span class='line'>    point.y = event!!.y.toInt()
+</span><span class='line'>
+</span><span class='line'>    var count = 0
+</span><span class='line'>
+</span><span class='line'>    for (arcSlice in list) {
+</span><span class='line'>        var region = Region().apply {
+</span><span class='line'>            setPath(arcSlice.path, arcSlice.region)
+</span><span class='line'>        }
+</span><span class='line'>
+</span><span class='line'>        if (region.contains(point.x, point.y) && event.action == MotionEvent.ACTION_DOWN) {
+</span><span class='line'>            indexSelected = count
+</span><span class='line'>
+</span><span class='line'>            onSliceClickListener?.onSliceClick(indexSelected)
+</span><span class='line'>            break
+</span><span class='line'>        }
+</span><span class='line'>
+</span><span class='line'>        count++
+</span><span class='line'>
+</span><span class='line'>    }
+</span><span class='line'>
+</span><span class='line'>    if (event.action == MotionEvent.ACTION_DOWN || event.action == MotionEvent.ACTION_UP) {
+</span><span class='line'>        postInvalidate()
+</span><span class='line'>    }
+</span><span class='line'>
+</span><span class='line'>    return true
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+
+
+
+</div>
+
+</article>
+
+	<div class="share">
+	<div class="addthis_toolbox addthis_default_style ">
+	
+	<a class="addthis_button_facebook_like" fb:like:layout="button_count"></a>
+	
+	
+	<a class="addthis_button_tweet"></a>
+	
+	
+	<a class="addthis_button_google_plusone" g:plusone:size="medium"></a>
+	
+	<a class="addthis_counter addthis_pill_style"></a>
+	</div>
+  <script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#pubid="></script>
+</div>
+
+
+
+<section id="comment">
+    <h1 class="title">Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+</section>
+</div>
+			</div>
+			<footer id="footer" class="inner">Copyright &copy; 2018
+
+    Huteri Manza
+
+</footer>
+		</div>
+	</div>
+	
+
+<script type="text/javascript">
+      var disqus_shortname = 'huterimanza';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://huteri.me/2018/03/19/learning-custom-views-in-android/';
+        var disqus_url = 'http://huteri.me/2018/03/19/learning-custom-views-in-android/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) {return;}
+  js = d.createElement(s); js.id = id; js.async = true;
+  js.src = "//connect.facebook.net/en_US/all.js#appId=212934732101925&xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var script = document.createElement('script'); script.type = 'text/javascript'; script.async = true;
+      script.src = 'https://apis.google.com/js/plusone.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(script, s);
+    })();
+  </script>
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+</body>
+</html>
