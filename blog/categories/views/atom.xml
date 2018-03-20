@@ -4,7 +4,7 @@
   <title><![CDATA[Category: views | Huteri Manza Blog]]></title>
   <link href="http://huteri.me/blog/categories/views/atom.xml" rel="self"/>
   <link href="http://huteri.me/"/>
-  <updated>2018-03-20T13:01:58+08:00</updated>
+  <updated>2018-03-20T14:15:25+08:00</updated>
   <id>http://huteri.me/</id>
   <author>
     <name><![CDATA[Huteri Manza]]></name>
@@ -82,7 +82,10 @@ it.drawArc(rectF, -90f, 180f, false, paint.apply {
 
 <p>Remember, in order to define touch area, we need to know how to draw it. Let&rsquo;s see how we can define this area.</p>
 
-<pre><code>var pathSelected = Path()
+<pre><code>val centerX = (it.width.div(2)).toFloat()
+val centerY = (it.height.div(2)).toFloat()
+
+var pathSelected = Path()
 
 rectFSelected.apply {
     set(centerX - 400, centerY - 400, centerX + 400, centerY + 400)
@@ -100,7 +103,7 @@ pathSelected.close()
 pathSelected.computeBounds(rectFSelected, true)
 </code></pre>
 
-<p>First, we are going to define the first arc which is the curve of the slice, and then define the second arc, but if you look closely, the rect for second arc is the center of the view which is (0, 0). So there is actually no arc. It&rsquo;s just telling path to use this center view. <code>Path.close()</code> will close those 2 arcs with lines. That&rsquo;s how we get the slice of the pie.</p>
+<p>First, we are going to define the first arc which is the curve of the slice, and then define the second arc, but if you look closely, the rect for second arc is the center of the view which is height and width of the canvas divided by 2. So there is actually no arc. It&rsquo;s just telling path to use this center view. <code>Path.close()</code> will close those 2 arcs with lines. That&rsquo;s how we get the slice of the pie.</p>
 
 <p>That&rsquo;s it. we get the <code>Path</code> and then we only need to set this path as region, and put it inside of the data list.</p>
 

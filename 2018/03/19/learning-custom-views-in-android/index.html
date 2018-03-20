@@ -200,7 +200,13 @@
 <span class='line-number'>14</span>
 <span class='line-number'>15</span>
 <span class='line-number'>16</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>var pathSelected = Path()
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>val centerX = (it.width.div(2)).toFloat()
+</span><span class='line'>val centerY = (it.height.div(2)).toFloat()
+</span><span class='line'>
+</span><span class='line'>var pathSelected = Path()
 </span><span class='line'>
 </span><span class='line'>rectFSelected.apply {
 </span><span class='line'>    set(centerX - 400, centerY - 400, centerX + 400, centerY + 400)
@@ -218,7 +224,7 @@
 </span><span class='line'>pathSelected.computeBounds(rectFSelected, true)</span></code></pre></td></tr></table></div></figure>
 
 
-<p>First, we are going to define the first arc which is the curve of the slice, and then define the second arc, but if you look closely, the rect for second arc is the center of the view which is (0, 0). So there is actually no arc. It&rsquo;s just telling path to use this center view. <code>Path.close()</code> will close those 2 arcs with lines. That&rsquo;s how we get the slice of the pie.</p>
+<p>First, we are going to define the first arc which is the curve of the slice, and then define the second arc, but if you look closely, the rect for second arc is the center of the view which is height and width of the canvas divided by 2. So there is actually no arc. It&rsquo;s just telling path to use this center view. <code>Path.close()</code> will close those 2 arcs with lines. That&rsquo;s how we get the slice of the pie.</p>
 
 <p>That&rsquo;s it. we get the <code>Path</code> and then we only need to set this path as region, and put it inside of the data list.</p>
 
