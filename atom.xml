@@ -4,7 +4,7 @@
   <title><![CDATA[Huteri Manza Blog]]></title>
   <link href="http://huteri.me/atom.xml" rel="self"/>
   <link href="http://huteri.me/"/>
-  <updated>2018-03-20T14:15:25+08:00</updated>
+  <updated>2019-02-13T15:13:54+08:00</updated>
   <id>http://huteri.me/</id>
   <author>
     <name><![CDATA[Huteri Manza]]></name>
@@ -18,7 +18,7 @@
     <link href="http://huteri.me/2018/03/19/learning-custom-views-in-android/"/>
     <updated>2018-03-19T15:35:00+08:00</updated>
     <id>http://huteri.me/2018/03/19/learning-custom-views-in-android</id>
-    <content type="html"><![CDATA[<p>I just created my first custom view, and I would like to share what I learned and hopefully this can help someone to create their own custom view. Basically, this custom view is simple analog clock view, where we can put in our xml then it will just work. Here is the screenshot</p>
+    <content type="html"><![CDATA[<p>I just created my first custom view, and I would like to share what I learned and hopefully this can help someone to create their own custom view. The sample custom view here is simple analog clock, it&rsquo;s analog clock view where we can use it in our xml then it will show. Here is the screenshot</p>
 
 <!--more-->
 
@@ -33,7 +33,7 @@
 
 <h4>1. <code>Canvas.drawArc()</code></h4>
 
-<p>This is a way to draw an arc. We can draw complete circle with this method. From the documentation we can see this</p>
+<p>This is a function from Canvas API to draw an arc. We can draw complete circle with this method. We can see this in the documentation</p>
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -41,9 +41,9 @@
 </span><span class='line'>// Draw the specified arc, which will be scaled to fit inside the specified oval.</span></code></pre></td></tr></table></div></figure>
 
 
-<p>In an circle we have angle, so startAngle is starting point to draw the arc. SweepAngle is the how long the arc will be. The zero in startAngle starts from 3 o'clock, so if we put -90 as startAngle, and 180 as sweepAngle, then android will draw half oval from 12 o'clock to 6 o'clock.</p>
+<p>startAngle is starting point to draw the arc. SweepAngle is the how long the arc will be. The zero in startAngle starts from 3 o'clock, so if we put -90 as startAngle, and 180 as sweepAngle, then android will draw half oval from 12 o'clock to 6 o'clock.</p>
 
-<p>So, what is RectF in this case? It&rsquo;s like the canvas where we want to draw the circle. The arc will follow the form of this rectF, to draw a circle we will need to have a square as rectF which has 4 equal sides.</p>
+<p>So, what is RectF in this case? It&rsquo;s like the canvas where we want to draw the circle. The arc will follow the form of this rectF, so to draw a circle we need the canvas to be a square which has 4 equal sides.</p>
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -65,21 +65,23 @@
 </span><span class='line'>})</span></code></pre></td></tr></table></div></figure>
 
 
-<p>We create a rectF with size 400 in all 4 sides, then draw an arc inside of this</p>
+<p>In the code above, we create a rectF and set the size to be 400 in all 4 sides, then we can draw an arc inside of this rectF</p>
 
 <p><img src="http://huteri.me/images/post/custom_view_arc.png" width="250"></p>
 
 <h4>2. Draw Moving Hands in Analog Clock</h4>
 
-<p>We have moving hands in the analog clock for hour, minute, and second. How to draw this? Basically the hands are just rectangular with rounded corners. We can draw rounded rectangular easily with <code>Canvas.drawRoundRect()</code> api. But how to draw rounded rect to point to 5 o'clock? This is where <code>Canvas.save()</code> and <code>Canvas.rotate()</code> come to play.</p>
+<p>We have moving hands in the analog clock for hour, minute, and second. How to draw this? Basically the hands are just rectangular with rounded corners. We can draw rounded rectangular easily with <code>Canvas.drawRoundRect()</code> api but how do we draw rounded rect to point to 5 o'clock? This is where <code>Canvas.save()</code> and <code>Canvas.rotate()</code> come to play.</p>
 
-<p>We basically save the snapshot of the current canvas with <code>Canvas.save()</code>. I would say this thing saves the position of each view inside of the canvas. First we draw the rounded rectangular to 12  o'clock, then rotate the canvas 150 degrees to get it to 5 o'clock. (every hour is 30 degrees)</p>
+<p>First we save the snapshot of the current canvas with <code>Canvas.save()</code>. I would say this thing saves the position of each view inside of the current canvas.</p>
 
-<p>Call <code>Canvas.restore</code> to restore position of each view from last save. it won&rsquo;t restore the rounded rect because we save before we draw this.</p>
+<p>Second we draw the rounded rectangular to point to 12  o'clock, then rotate the canvas 150 degrees to get it to 5 o'clock. (every hour is 30 degrees)</p>
+
+<p>Call <code>Canvas.restore</code> to restore position of each view from last save. it won&rsquo;t remove the rounded rectangle and its rotation. It&rsquo;s one of the cool thing from this function.</p>
 
 <h4>3. Touch Area and Selected Area</h4>
 
-<p>This is one the hardest part in this custom view. This is about how to make our custom view clickable and respond to our touch.</p>
+<p>This is one the hardest part in this custom view. It&rsquo;s about how to make our custom view clickable and give feedback to our touches.</p>
 
 <p>So, how do we define touch area for specific view? By using Region. Defining a region is basically the same like we draw a view. We can use the arc as the region, but we should make the region in such way that the user can easily touch and select the item.</p>
 
