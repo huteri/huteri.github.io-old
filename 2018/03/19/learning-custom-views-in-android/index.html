@@ -9,7 +9,7 @@
 	<meta name="author" content="Huteri Manza">
 
 	
-	<meta name="description" content="Learning Custom Views in Android I just created my first custom view, and I would like to share what I learned and hopefully this can help someone &hellip;">
+	<meta name="description" content="Learning Custom Views in Android Today, I would like to share my experience with custom views, and hopefully this can help someone to create their &hellip;">
 	
 
   <!-- http://t.co/dKP3o1e -->
@@ -67,7 +67,7 @@
 
 <section class="aboutme">
   <p>
-    Written by Huteri Manza and it's mostly talking about Android Development tips and tricks
+    Written by Huteri Manza and it's mostly about Android Development tips and tricks
   </p>
 </section>
 </nav>
@@ -109,22 +109,22 @@
 			<div class="mid-col-container">
 				<div id="content" class="inner"><article class="post" itemscope itemtype="http://schema.org/BlogPosting">
 	<h1 class="title" itemprop="name">Learning Custom Views in Android</h1>
-	<div class="entry-content" itemprop="articleBody"><p>I just created my first custom view, and I would like to share what I learned and hopefully this can help someone to create their own custom view. The sample custom view here is simple analog clock, it&rsquo;s analog clock view where we can use it in our xml then it will show. Here is the screenshot</p>
+	<div class="entry-content" itemprop="articleBody"><p>Today, I would like to share my experience with custom views, and hopefully this can help someone to create their own custom view. The custom view here is a simple analog clock, it&rsquo;s analog clock view where we can put it in xml to show it. Here is the sample</p>
 
 <!--more-->
 
 
 <p><img src="/images/post/simple_analog_clock.png"></p>
 
-<p>It&rsquo;s available in github and everyone can use this as library</p>
+<p>It&rsquo;s available in github and everyone can take a look</p>
 
 <p><a href="https://github.com/huteri/analogclock">https://github.com/huteri/analogclock</a></p>
 
-<p>Let&rsquo;s see the components I used to create the view.</p>
+<p>Let&rsquo;s see how I created this custom view</p>
 
 <h4>1. <code>Canvas.drawArc()</code></h4>
 
-<p>This is a function from Canvas API to draw an arc. We can draw complete circle with this method. We can see this in the documentation</p>
+<p><code>Canvas.drawArc()</code> is a function from Canvas API. The basic functionality of this api is to draw arc and we can use this to draw complete circle.</p>
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -132,7 +132,7 @@
 </span><span class='line'>// Draw the specified arc, which will be scaled to fit inside the specified oval.</span></code></pre></td></tr></table></div></figure>
 
 
-<p>startAngle is starting point to draw the arc. SweepAngle is the how long the arc will be. The zero in startAngle starts from 3 o'clock, so if we put -90 as startAngle, and 180 as sweepAngle, then android will draw half oval from 12 o'clock to 6 o'clock.</p>
+<p>Basically, the startAngle is starting point to draw the arc which starts from 3 o'clock and sweepAngle is how long the arc will be so if we set -90 as startAngle, and 180 as sweepAngle, then android will draw half oval from 12 o'clock to 6 o'clock.</p>
 
 <p>So, what is RectF in this case? It&rsquo;s like the canvas where we want to draw the circle. The arc will follow the form of this rectF, so to draw a circle we need the canvas to be a square which has 4 equal sides.</p>
 
@@ -164,11 +164,11 @@
 
 <p>We have moving hands in the analog clock for hour, minute, and second. How to draw this? Basically the hands are just rectangular with rounded corners. We can draw rounded rectangular easily with <code>Canvas.drawRoundRect()</code> api but how do we draw rounded rect to point to 5 o'clock? This is where <code>Canvas.save()</code> and <code>Canvas.rotate()</code> come to play.</p>
 
-<p>First we save the snapshot of the current canvas with <code>Canvas.save()</code>. I would say this thing saves the position of each view inside of the current canvas.</p>
+<p>First we save the snapshot of the current canvas with <code>Canvas.save()</code>. I would say this saves the position of each view inside of the current canvas.</p>
 
-<p>Second we draw the rounded rectangular to point to 12  o'clock, then rotate the canvas 150 degrees to get it to 5 o'clock. (every hour is 30 degrees)</p>
+<p>Second we draw the rounded rectangular to point to 12  o'clock, then rotate the canvas 150 degrees to get it to 5 o'clock. (every hour is 30 degree)</p>
 
-<p>Call <code>Canvas.restore</code> to restore position of each view from last save. it won&rsquo;t remove the rounded rectangle and its rotation. It&rsquo;s one of the cool thing from this function.</p>
+<p>Call <code>Canvas.restore</code> to restore position of each view from last save. it won&rsquo;t restore the position of rounded rectangle and its rotation because we call &lsquo;Canvas.save&rsquo; before we draw these</p>
 
 <h4>3. Touch Area and Selected Area</h4>
 

@@ -4,7 +4,7 @@
   <title><![CDATA[Category: views | Huteri Manza Blog]]></title>
   <link href="http://huteri.me/blog/categories/views/atom.xml" rel="self"/>
   <link href="http://huteri.me/"/>
-  <updated>2019-02-13T15:13:54+08:00</updated>
+  <updated>2019-02-13T15:25:02+08:00</updated>
   <id>http://huteri.me/</id>
   <author>
     <name><![CDATA[Huteri Manza]]></name>
@@ -18,28 +18,28 @@
     <link href="http://huteri.me/2018/03/19/learning-custom-views-in-android/"/>
     <updated>2018-03-19T15:35:00+08:00</updated>
     <id>http://huteri.me/2018/03/19/learning-custom-views-in-android</id>
-    <content type="html"><![CDATA[<p>I just created my first custom view, and I would like to share what I learned and hopefully this can help someone to create their own custom view. The sample custom view here is simple analog clock, it&rsquo;s analog clock view where we can use it in our xml then it will show. Here is the screenshot</p>
+    <content type="html"><![CDATA[<p>Today, I would like to share my experience with custom views, and hopefully this can help someone to create their own custom view. The custom view here is a simple analog clock, it&rsquo;s analog clock view where we can put it in xml to show it. Here is the sample</p>
 
 <!--more-->
 
 
 <p><img src="/images/post/simple_analog_clock.png"></p>
 
-<p>It&rsquo;s available in github and everyone can use this as library</p>
+<p>It&rsquo;s available in github and everyone can take a look</p>
 
 <p><a href="https://github.com/huteri/analogclock">https://github.com/huteri/analogclock</a></p>
 
-<p>Let&rsquo;s see the components I used to create the view.</p>
+<p>Let&rsquo;s see how I created this custom view</p>
 
 <h4>1. <code>Canvas.drawArc()</code></h4>
 
-<p>This is a function from Canvas API to draw an arc. We can draw complete circle with this method. We can see this in the documentation</p>
+<p><code>Canvas.drawArc()</code> is a function from Canvas API. The basic functionality of this api is to draw arc and we can use this to draw complete circle.</p>
 
 <pre><code>drawArc(RectF oval, float startAngle, float sweepAngle, boolean useCenter, Paint paint)
 // Draw the specified arc, which will be scaled to fit inside the specified oval.
 </code></pre>
 
-<p>startAngle is starting point to draw the arc. SweepAngle is the how long the arc will be. The zero in startAngle starts from 3 o'clock, so if we put -90 as startAngle, and 180 as sweepAngle, then android will draw half oval from 12 o'clock to 6 o'clock.</p>
+<p>Basically, the startAngle is starting point to draw the arc which starts from 3 o'clock and sweepAngle is how long the arc will be so if we set -90 as startAngle, and 180 as sweepAngle, then android will draw half oval from 12 o'clock to 6 o'clock.</p>
 
 <p>So, what is RectF in this case? It&rsquo;s like the canvas where we want to draw the circle. The arc will follow the form of this rectF, so to draw a circle we need the canvas to be a square which has 4 equal sides.</p>
 
@@ -62,11 +62,11 @@ it.drawArc(rectF, -90f, 180f, false, paint.apply {
 
 <p>We have moving hands in the analog clock for hour, minute, and second. How to draw this? Basically the hands are just rectangular with rounded corners. We can draw rounded rectangular easily with <code>Canvas.drawRoundRect()</code> api but how do we draw rounded rect to point to 5 o'clock? This is where <code>Canvas.save()</code> and <code>Canvas.rotate()</code> come to play.</p>
 
-<p>First we save the snapshot of the current canvas with <code>Canvas.save()</code>. I would say this thing saves the position of each view inside of the current canvas.</p>
+<p>First we save the snapshot of the current canvas with <code>Canvas.save()</code>. I would say this saves the position of each view inside of the current canvas.</p>
 
-<p>Second we draw the rounded rectangular to point to 12  o'clock, then rotate the canvas 150 degrees to get it to 5 o'clock. (every hour is 30 degrees)</p>
+<p>Second we draw the rounded rectangular to point to 12  o'clock, then rotate the canvas 150 degrees to get it to 5 o'clock. (every hour is 30 degree)</p>
 
-<p>Call <code>Canvas.restore</code> to restore position of each view from last save. it won&rsquo;t remove the rounded rectangle and its rotation. It&rsquo;s one of the cool thing from this function.</p>
+<p>Call <code>Canvas.restore</code> to restore position of each view from last save. it won&rsquo;t restore the position of rounded rectangle and its rotation because we call &lsquo;Canvas.save&rsquo; before we draw these</p>
 
 <h4>3. Touch Area and Selected Area</h4>
 
