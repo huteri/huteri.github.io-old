@@ -1,0 +1,399 @@
+
+<!DOCTYPE HTML>
+
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<title>Decoder Failed to Init - Exoplayer in ViewPager - Huteri Manza Blog</title>
+	<meta name="author" content="Huteri Manza">
+
+	
+	<meta name="description" content="Decoder Failed to Init - Exoplayer in ViewPager There are number of limitations on how many we can initialize exoplayer in 1 device. Initialize more &hellip;">
+	
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<link href="/atom.xml" rel="alternate" title="Huteri Manza Blog" type="application/atom+xml">
+	
+	<link rel="canonical" href="http://huteri.me/2019/09/13/decoder-failed-to-init-exoplayer-in-viewpager/">
+	<link href="/favicon.png" rel="shortcut icon">
+	<link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<link href="/stylesheets/font-awesome.min.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	<link href='http://fonts.googleapis.com/css?family=Nunito:400,300,700' rel='stylesheet' type='text/css'>
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+	
+  
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', 'UA-65050731-1']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+	</script>
+
+
+</head>
+
+
+<body>
+	<div class="container">
+		<div class="left-col">
+			<div class="intrude-less">
+			<header id="header" class="inner"><div class="profilepic">
+	
+	<script src="/javascripts/md5.js"></script>
+	<script type="text/javascript">
+		$(function(){
+			$('.profilepic').append("<img src='/images/profile.jpg' alt='Profile Picture' style='width: 160px;' />");
+		});
+	</script>
+	
+</div>
+
+<nav id="main-nav"><ul class="main">
+    <li><a href="/">Home</a></li>
+    <li><a href="/about">About</a></li>
+    <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+<section class="aboutme">
+  <p>
+    Written by Huteri Manza and it's mostly about Android Development tips and tricks
+  </p>
+</section>
+</nav>
+<nav id="sub-nav">
+	<div class="social">
+		
+		
+		
+			<a class="google" href="https://plus.google.com/huterimanza" rel="author" title="Google+">Google+</a>
+		
+		
+			<a class="twitter" href="http://twitter.com/huterimanza" title="Twitter">Twitter</a>
+		
+		
+			<a class="github" href="https://github.com/huteri" title="GitHub">GitHub</a>
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+    	
+    	
+			<a class="rss" href="/atom.xml" title="RSS">RSS</a>
+		
+	</div>
+</nav>
+</header>				
+			</div>
+		</div>	
+		<div class="mid-col">
+			
+				
+			
+			<div class="mid-col-container">
+				<div id="content" class="inner"><article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+	<h1 class="title" itemprop="name">Decoder Failed to Init - Exoplayer in ViewPager</h1>
+	<div class="entry-content" itemprop="articleBody"><p>There are number of limitations on how many we can initialize exoplayer in 1 device. Initialize more than it should be will cause exoplayer to throw exception that is not easy to debug and break the whole video player in the app.</p>
+
+<!--more-->
+
+
+<p>It&rsquo;s pretty common when we initialize exoplayer in viewpager, depends on where we initialize exoplayer. it can keep creating new instance everytime we swipe or navigate to another screen and come back.</p>
+
+<p>Exception thrown from emulator as my experiments related with AudioTrack.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>playerFailed [0.58, 1]
+</span><span class='line'>    com.google.android.exoplayer2.ExoPlaybackException: com.google.android.exoplayer2.audio.AudioSink$InitializationException: AudioTrack init failed: 0, Config(32000, 12, 32000)
+</span><span class='line'>        at com.google.android.exoplayer2.audio.MediaCodecAudioRenderer.processOutputBuffer(MediaCodecAudioRenderer.java:738)
+</span><span class='line'>        at com.google.android.exoplayer2.mediacodec.MediaCodecRenderer.drainOutputBuffer(MediaCodecRenderer.java:1507)
+</span><span class='line'>        at com.google.android.exoplayer2.mediacodec.MediaCodecRenderer.render(MediaCodecRenderer.java:653)
+</span><span class='line'>        at com.google.android.exoplayer2.ExoPlayerImplInternal.doSomeWork(ExoPlayerImplInternal.java:575)
+</span><span class='line'>        at com.google.android.exoplayer2.ExoPlayerImplInternal.handleMessage(ExoPlayerImplInternal.java:326)
+</span><span class='line'>        at android.os.Handler.dispatchMessage(Handler.java:102)
+</span><span class='line'>        at android.os.Looper.loop(Looper.java:164)
+</span><span class='line'>        at android.os.HandlerThread.run(HandlerThread.java:65)
+</span><span class='line'>     Caused by: com.google.android.exoplayer2.audio.AudioSink$InitializationException: AudioTrack init failed: 0, Config(32000, 12, 32000)
+</span><span class='line'>        at com.google.android.exoplayer2.audio.DefaultAudioSink$Configuration.buildAudioTrack(DefaultAudioSink.java:1415)
+</span><span class='line'>        at com.google.android.exoplayer2.audio.DefaultAudioSink.initialize(DefaultAudioSink.java:514)
+</span><span class='line'>        at com.google.android.exoplayer2.audio.DefaultAudioSink.handleBuffer(DefaultAudioSink.java:595)
+</span><span class='line'>        at com.google.android.exoplayer2.audio.MediaCodecAudioRenderer.processOutputBuffer(MediaCodecAudioRenderer.java:732)
+</span><span class='line'>        at com.google.android.exoplayer2.mediacodec.MediaCodecRenderer.drainOutputBuffer(MediaCodecRenderer.java:1507) 
+</span><span class='line'>        at com.google.android.exoplayer2.mediacodec.MediaCodecRenderer.render(MediaCodecRenderer.java:653) 
+</span><span class='line'>        at com.google.android.exoplayer2.ExoPlayerImplInternal.doSomeWork(ExoPlayerImplInternal.java:575) 
+</span><span class='line'>        at com.google.android.exoplayer2.ExoPlayerImplInternal.handleMessage(ExoPlayerImplInternal.java:326) 
+</span><span class='line'>        at android.os.Handler.dispatchMessage(Handler.java:102) 
+</span><span class='line'>        at android.os.Looper.loop(Looper.java:164) 
+</span><span class='line'>        at android.os.HandlerThread.run(HandlerThread.java:65) </span></code></pre></td></tr></table></div></figure>
+
+
+<p>As for my google pixel will throw <code>Decoder init failed: OMX.qcom.video.decoder.avc...</code></p>
+
+<p>To solve this, track how many initialization happened in the app and how many times it released.</p>
+
+<p>Filter the logcat by <code>ExoPlayerImpl</code> will give result like this</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>Init b27c0c5 [ExoPlayerLib/2.10.4] [taimen, Pixel 2 XL, Google, 29]
+</span><span class='line'>Init 47cabd7 [ExoPlayerLib/2.10.4] [taimen, Pixel 2 XL, Google, 29]
+</span><span class='line'>Init e299218 [ExoPlayerLib/2.10.4] [taimen, Pixel 2 XL, Google, 29]
+</span><span class='line'>Release e299218 [ExoPlayerLib/2.10.4] [taimen, Pixel 2 XL, Google, 29] [goog.exo.core, goog.exo.ui, goog.exo.hls]
+</span><span class='line'>Init 84cae8b [ExoPlayerLib/2.10.4] [taimen, Pixel 2 XL, Google, 29]
+</span><span class='line'>Init 47a1ebd [ExoPlayerLib/2.10.4] [taimen, Pixel 2 XL, Google, 29]
+</span><span class='line'>Init 2b65814 [ExoPlayerLib/2.10.4] [taimen, Pixel 2 XL, Google, 29]
+</span><span class='line'>Release 2b65814 [ExoPlayerLib/2.10.4] [taimen, Pixel 2 XL, Google, 29] [goog.exo.core, goog.exo.ui, goog.exo.hls]
+</span><span class='line'>Init c5b3e6 [ExoPlayerLib/2.10.4] [taimen, Pixel 2 XL, Google, 29]
+</span><span class='line'>Init e364140 [ExoPlayerLib/2.10.4] [taimen, Pixel 2 XL, Google, 29]
+</span><span class='line'>Init a7adbbe [ExoPlayerLib/2.10.4] [taimen, Pixel 2 XL, Google, 29]
+</span><span class='line'>Release a7adbbe [ExoPlayerLib/2.10.4] [taimen, Pixel 2 XL, Google, 29] [goog.exo.core, goog.exo.ui, goog.exo.hls]
+</span><span class='line'>Init 35bee65 [ExoPlayerLib/2.10.4] [taimen, Pixel 2 XL, Google, 29]
+</span><span class='line'>Init 25a4fc7 [ExoPlayerLib/2.10.4] [taimen, Pixel 2 XL, Google, 29]
+</span><span class='line'>Init 39147e8 [ExoPlayerLib/2.10.4] [taimen, Pixel 2 XL, Google, 29]
+</span><span class='line'>Release 39147e8 [ExoPlayerLib/2.10.4] [taimen, Pixel 2 XL, Google, 29] [goog.exo.core, goog.exo.ui, goog.exo.hls]
+</span><span class='line'>Init 8749a97 [ExoPlayerLib/2.10.4] [taimen, Pixel 2 XL, Google, 29]
+</span><span class='line'>Init ad6ca69 [ExoPlayerLib/2.10.4] [taimen, Pixel 2 XL, Google, 29]
+</span><span class='line'>Init ef20e73 [ExoPlayerLib/2.10.4] [taimen, Pixel 2 XL, Google, 29]
+</span><span class='line'>Release ef20e73 [ExoPlayerLib/2.10.4] [taimen, Pixel 2 XL, Google, 29] [goog.exo.core, goog.exo.ui, goog.exo.hls]
+</span><span class='line'>Init f79bc02 [ExoPlayerLib/2.10.4] [taimen, Pixel 2 XL, Google, 29]
+</span><span class='line'>Init 623a87c [ExoPlayerLib/2.10.4] [taimen, Pixel 2 XL, Google, 29]
+</span><span class='line'>Init eaa033c [ExoPlayerLib/2.10.4] [taimen, Pixel 2 XL, Google, 29]
+</span><span class='line'>Release eaa033c [ExoPlayerLib/2.10.4] [taimen, Pixel 2 XL, Google, 29] [goog.exo.core, goog.exo.ui, goog.exo.hls]
+</span><span class='line'>Init 5fd9dcd [ExoPlayerLib/2.10.4] [taimen, Pixel 2 XL, Google, 29]
+</span><span class='line'>Init 99a43ef [ExoPlayerLib/2.10.4] [taimen, Pixel 2 XL, Google, 29]
+</span><span class='line'>Init 77a19e0 [ExoPlayerLib/2.10.4] [taimen, Pixel 2 XL, Google, 29]
+</span><span class='line'>Release 77a19e0 [ExoPlayerLib/2.10.4] [taimen, Pixel 2 XL, Google, 29] [goog.exo.core, goog.exo.ui, goog.exo.hls]
+</span><span class='line'>Init 21ae6b3 [ExoPlayerLib/2.10.4] [taimen, Pixel 2 XL, Google, 29]
+</span><span class='line'>Init d8455a5 [ExoPlayerLib/2.10.4] [taimen, Pixel 2 XL, Google, 29]
+</span><span class='line'>Init 971d6c2 [ExoPlayerLib/2.10.4] [taimen, Pixel 2 XL, Google, 29]
+</span><span class='line'>Release 971d6c2 [ExoPlayerLib/2.10.4] [taimen, Pixel 2 XL, Google, 29] [goog.exo.core, goog.exo.ui, goog.exo.hls]
+</span><span class='line'>Init d1895ef [ExoPlayerLib/2.10.4] [taimen, Pixel 2 XL, Google, 29]</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Exoplayer kept initializing 2 instances but never release it, as for 3rd instance is fine, because it released after that but for the first 2 instance, there are no logcat of releasing it and it kept adding new instances everytime.</p>
+
+<p>The solution can be as simple as null checking before initializing it</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>   if(player != null)
+</span><span class='line'>      return
+</span><span class='line'>
+</span><span class='line'>  player = ExoPlayer(context)
+</span><span class='line'>  player?.initialize()</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This is what it looks like after null checking</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>
+</span><span class='line'>I/ExoPlayerImpl: Init cfbe42d [ExoPlayerLib/2.10.4] [taimen, Pixel 2 XL, Google, 29]
+</span><span class='line'>I/ExoPlayerImpl: Init 369091e [ExoPlayerLib/2.10.4] [taimen, Pixel 2 XL, Google, 29]
+</span><span class='line'>I/ExoPlayerImpl: Init 74f26bf [ExoPlayerLib/2.10.4] [taimen, Pixel 2 XL, Google, 29]
+</span><span class='line'>I/ExoPlayerImpl: Release 74f26bf [ExoPlayerLib/2.10.4] [taimen, Pixel 2 XL, Google, 29] [goog.exo.core, goog.exo.ui, goog.exo.hls]
+</span><span class='line'>I/ExoPlayerImpl: Init 3a6dbd2 [ExoPlayerLib/2.10.4] [taimen, Pixel 2 XL, Google, 29]
+</span><span class='line'>I/ExoPlayerImpl: Release 3a6dbd2 [ExoPlayerLib/2.10.4] [taimen, Pixel 2 XL, Google, 29] [goog.exo.core, goog.exo.ui, goog.exo.hls]
+</span><span class='line'>I/ExoPlayerImpl: Init 6b25a8d [ExoPlayerLib/2.10.4] [taimen, Pixel 2 XL, Google, 29]
+</span><span class='line'>I/ExoPlayerImpl: Release 6b25a8d [ExoPlayerLib/2.10.4] [taimen, Pixel 2 XL, Google, 29] [goog.exo.core, goog.exo.ui, goog.exo.hls]
+</span><span class='line'>I/ExoPlayerImpl: Init 4dda146 [ExoPlayerLib/2.10.4] [taimen, Pixel 2 XL, Google, 29]
+</span><span class='line'>I/ExoPlayerImpl: Release 4dda146 [ExoPlayerLib/2.10.4] [taimen, Pixel 2 XL, Google, 29] [goog.exo.core, goog.exo.ui, goog.exo.hls]
+</span><span class='line'>I/ExoPlayerImpl: Init 96c7128 [ExoPlayerLib/2.10.4] [taimen, Pixel 2 XL, Google, 29]
+</span><span class='line'>I/ExoPlayerImpl: Release 96c7128 [ExoPlayerLib/2.10.4] [taimen, Pixel 2 XL, Google, 29] [goog.exo.core, goog.exo.ui, goog.exo.hls]
+</span><span class='line'>I/ExoPlayerImpl: Init 9068361 [ExoPlayerLib/2.10.4] [taimen, Pixel 2 XL, Google, 29]
+</span><span class='line'>I/ExoPlayerImpl: Release 9068361 [ExoPlayerLib/2.10.4] [taimen, Pixel 2 XL, Google, 29] [goog.exo.core, goog.exo.ui, goog.exo.hls]
+</span><span class='line'>I/ExoPlayerImpl: Init a4681ac [ExoPlayerLib/2.10.4] [taimen, Pixel 2 XL, Google, 29]
+</span><span class='line'>I/ExoPlayerImpl: Release a4681ac [ExoPlayerLib/2.10.4] [taimen, Pixel 2 XL, Google, 29] [goog.exo.core, goog.exo.ui, goog.exo.hls]
+</span><span class='line'>I/ExoPlayerImpl: Init b6c38f2 [ExoPlayerLib/2.10.4] [taimen, Pixel 2 XL, Google, 29]
+</span><span class='line'>I/ExoPlayerImpl: Release b6c38f2 [ExoPlayerLib/2.10.4] [taimen, Pixel 2 XL, Google, 29] [goog.exo.core, goog.exo.ui, goog.exo.hls]
+</span><span class='line'>I/ExoPlayerImpl: Init d62768b [ExoPlayerLib/2.10.4] [taimen, Pixel 2 XL, Google, 29]
+</span><span class='line'>I/ExoPlayerImpl: Release d62768b [ExoPlayerLib/2.10.4] [taimen, Pixel 2 XL, Google, 29] [goog.exo.core, goog.exo.ui, goog.exo.hls]
+</span><span class='line'>I/ExoPlayerImpl: Init e65a93c [ExoPlayerLib/2.10.4] [taimen, Pixel 2 XL, Google, 29]
+</span><span class='line'>I/ExoPlayerImpl: Release e65a93c [ExoPlayerLib/2.10.4] [taimen, Pixel 2 XL, Google, 29] [goog.exo.core, goog.exo.ui, goog.exo.hls]</span></code></pre></td></tr></table></div></figure>
+
+
+<p>It still never releases the first 2 instances, but also never create new one, as it reuses the instances.</p>
+</div>
+
+</article>
+
+	<div class="share">
+	<div class="addthis_toolbox addthis_default_style ">
+	
+	<a class="addthis_button_facebook_like" fb:like:layout="button_count"></a>
+	
+	
+	<a class="addthis_button_tweet"></a>
+	
+	
+	<a class="addthis_button_google_plusone" g:plusone:size="medium"></a>
+	
+	<a class="addthis_counter addthis_pill_style"></a>
+	</div>
+  <script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#pubid="></script>
+</div>
+
+
+
+<section id="comment">
+    <h1 class="title">Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+</section>
+</div>
+			</div>
+			<footer id="footer" class="inner">Copyright &copy; 2019
+
+    Huteri Manza
+
+</footer>
+		</div>
+	</div>
+	
+
+<script type="text/javascript">
+      var disqus_shortname = 'huterimanza';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://huteri.me/2019/09/13/decoder-failed-to-init-exoplayer-in-viewpager/';
+        var disqus_url = 'http://huteri.me/2019/09/13/decoder-failed-to-init-exoplayer-in-viewpager/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) {return;}
+  js = d.createElement(s); js.id = id; js.async = true;
+  js.src = "//connect.facebook.net/en_US/all.js#appId=212934732101925&xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var script = document.createElement('script'); script.type = 'text/javascript'; script.async = true;
+      script.src = 'https://apis.google.com/js/plusone.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(script, s);
+    })();
+  </script>
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+</body>
+</html>
